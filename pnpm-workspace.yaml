@@ -1,0 +1,10 @@
+allowBuilds:
+  '@parcel/watcher': false
+  '@swc/core': false
+  cypress: false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
+  nx: false
+minimumReleaseAgeExclude:
+  - pnpm@11.4.0
