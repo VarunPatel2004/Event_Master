@@ -19,6 +19,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 // import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzCardModule,
     NzSpaceModule,
     // NzIconModule.forRoot(),
+    NzPaginationModule,
   ],
   templateUrl: './app.component.html',
 })
@@ -44,6 +46,9 @@ export class AppComponent implements OnInit {
   private message = inject(NzMessageService);
 
   validateForm!: FormGroup;
+  nzPageIndex = 1;
+
+  nzPageSize = 10;
 
   tableData: any[] = [];
 

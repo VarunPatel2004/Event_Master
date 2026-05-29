@@ -12,8 +12,9 @@
           <nz-form-control nzErrorTip="Required">
             <nz-input-group nzCompact style="display: flex;">
               <nz-select formControlName="firstCurrency" style="width: 110px; min-width: 110px;">
-                <nz-option *ngFor="let item of currencyList" [nzLabel]="item.label" [nzValue]="item.value">
-                </nz-option>
+                @for(item of currencyList;track item.value){
+                <nz-option [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+                }
               </nz-select>
               <input nz-input type="number" formControlName="firstAmount" placeholder="Amount" style="flex: 1;" />
             </nz-input-group>
@@ -37,7 +38,7 @@
 
       </div>
 
-      <!-- INR Amount -->
+
       <div nz-col nzFlex="220px">
 
         <nz-form-item>
@@ -68,8 +69,9 @@
           <nz-form-label nzRequired>Account Number</nz-form-label>
           <nz-form-control nzErrorTip="Account Number Required">
             <nz-select formControlName="accountNumber" nzPlaceHolder="Select Account Number" style="width: 270px">
-              <nz-option *ngFor="let item of accountNumberList" [nzLabel]="item.value" [nzValue]="item.value">
-              </nz-option>
+              @for (item of accountNumberList; track item.value){
+              <nz-option [nzLabel]="item.value" [nzValue]="item.value"></nz-option>
+              }
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -92,29 +94,33 @@
 
   </form>
 
-  <!-- </form> -->
 
   <!-- Table -->
 
-  <nz-table [nzData]="tableData" [nzBordered]="true" [nzSize]="'middle' " [nzNoResult]=" 'No Data Available'">
+  <nz-table [nzData]="tableData" [nzPageSize]="5" [nzBordered]="true" [nzSize]="'middle' "
+    [nzNoResult]=" 'No Data Available'">
 
     <thead>
 
       <tr>
+        <th>Sr No </th>
         <th>Account Number</th>
         <th>Currency</th>
         <th>Amount</th>
         <th>Rate</th>
         <th>INR Amount</th>
-
         <th>Action</th>
       </tr>
 
     </thead>
 
     <tbody>
-
-      <tr *ngFor="let data of tableData; let i = index">
+      @for(data of tableData; track data; let i = $index){
+      <!-- *ngFor="let data of tableData; let i = index" -->
+      <tr>
+        <td>{{
+              (nzPageIndex - 1) * nzPageSize + i + 1
+          }}</td>
         <td>{{ data.accountNumber }}</td>
         <td>{{ data.firstCurrency }}</td>
 
@@ -129,7 +135,6 @@
         <td>
 
           <button nz-button nzType="link" (click)="editRow(i)">
-            <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
             Edit
           </button>
 
@@ -140,6 +145,7 @@
         </td>
 
       </tr>
+      }
 
     </tbody>
 

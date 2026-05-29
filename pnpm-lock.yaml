@@ -33,8 +33,11 @@ importers:
         specifier: ~18.2.0
         version: 18.2.14(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2)
       '@ant-design/icons-angular':
-        specifier: ^21.0.0
-        version: 21.0.0(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2)
+        specifier: ^18.0.0
+        version: 18.0.0(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2)
+      '@ctrl/tinycolor':
+        specifier: ^4.2.0
+        version: 4.2.0
       ng-zorro-antd:
         specifier: ^18.2.1
         version: 18.2.1(f9ff5a9986df8498ddf45d5793f17baa)
@@ -405,14 +408,6 @@ packages:
       '@angular/core': ^18.0.0
       '@angular/platform-browser': ^18.0.0
       rxjs: ^6.4.0 || ^7.4.0
-
-  '@ant-design/icons-angular@21.0.0':
-    resolution: {integrity: sha512-Io1DSg0JyzsxQtF2T9LfQSZL22d7zSYyNz0RiUCOhtMoDnnGis1oU6mPs5JzZTRtVdgpuLUhS6GVTlT+dmP1nA==}
-    peerDependencies:
-      '@angular/common': ^21.0.0
-      '@angular/core': ^21.0.0
-      '@angular/platform-browser': ^21.0.0
-      rxjs: ^6.5.3 || ^7.4.0
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -1098,6 +1093,10 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
+
+  '@ctrl/tinycolor@4.2.0':
+    resolution: {integrity: sha512-kzyuwOAQnXJNLS9PSyrk0CWk35nWJW/zl/6KvnTBMFK65gm7U1/Z5BqjxeapjZCIhQcM/DsrEmcbRwDyXyXK4A==}
+    engines: {node: '>=14'}
 
   '@cypress/request@3.0.10':
     resolution: {integrity: sha512-hauBrOdvu08vOsagkZ/Aju5XuiZx6ldsLfByg1htFeldhex+PeMrYauANzFsMJeAA0+dyPLbDoX2OYuvVoLDkQ==}
@@ -7969,15 +7968,6 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@ant-design/icons-angular@21.0.0(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2)':
-    dependencies:
-      '@angular/common': 18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
-      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
-      '@angular/platform-browser': 18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))
-      '@ant-design/colors': 7.2.1
-      rxjs: 7.8.2
-      tslib: 2.8.1
-
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -9387,6 +9377,8 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+
+  '@ctrl/tinycolor@4.2.0': {}
 
   '@cypress/request@3.0.10':
     dependencies:
