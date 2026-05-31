@@ -20,6 +20,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 // import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-root',
@@ -39,6 +41,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     NzSpaceModule,
     // NzIconModule.forRoot(),
     NzPaginationModule,
+    NzIconModule,
+    NzPopconfirmModule,
   ],
   templateUrl: './app.component.html',
 })
@@ -46,6 +50,7 @@ export class AppComponent implements OnInit {
   private message = inject(NzMessageService);
 
   validateForm!: FormGroup;
+  selecrform!: FormGroup;
   nzPageIndex = 1;
 
   nzPageSize = 10;
@@ -54,68 +59,68 @@ export class AppComponent implements OnInit {
 
   editIndex: number | null = null;
 
-  currencyList = [
-    {
-      label: 'USD',
-      value: 'USD',
-      rate: 83.0,
-    },
-    {
-      label: 'INR',
-      value: 'INR',
-      rate: 1.0,
-    },
-    {
-      label: 'EUR',
-      value: 'EUR',
-      rate: 90.0,
-    },
-    {
-      label: 'GBP',
-      value: 'GBP',
-      rate: 105.0,
-    },
-    {
-      label: 'JPY',
-      value: 'JPY',
-      rate: 0.56,
-    },
-    {
-      label: 'AUD',
-      value: 'AUD',
-      rate: 55.0,
-    },
-    {
-      label: 'CAD',
-      value: 'CAD',
-      rate: 61.0,
-    },
-    {
-      label: 'SGD',
-      value: 'SGD',
-      rate: 62.0,
-    },
-    {
-      label: 'AED',
-      value: 'AED',
-      rate: 22.5,
-    },
-    {
-      label: 'CNY',
-      value: 'CNY',
-      rate: 11.5,
-    },
-    {
-      label: 'CHF',
-      value: 'CHF',
-      rate: 95.0,
-    },
-    {
-      label: 'NZD',
-      value: 'NZD',
-      rate: 50.0,
-    },
-  ];
+currencyList = [
+  {
+    label: 'USD',
+    value: 'USD',
+    rate: 83.3245,
+  },
+  {
+    label: 'INR',
+    value: 'INR',
+    rate: 1.0000,
+  },
+  {
+    label: 'EUR',
+    value: 'EUR',
+    rate: 90.4567,
+  },
+  {
+    label: 'GBP',
+    value: 'GBP',
+    rate: 105.7891,
+  },
+  {
+    label: 'JPY',
+    value: 'JPY',
+    rate: 0.5634,
+  },
+  {
+    label: 'AUD',
+    value: 'AUD',
+    rate: 55.3245,
+  },
+  {
+    label: 'CAD',
+    value: 'CAD',
+    rate: 61.4523,
+  },
+  {
+    label: 'SGD',
+    value: 'SGD',
+    rate: 62.7812,
+  },
+  {
+    label: 'AED',
+    value: 'AED',
+    rate: 22.5678,
+  },
+  {
+    label: 'CNY',
+    value: 'CNY',
+    rate: 11.5432,
+  },
+  {
+    label: 'CHF',
+    value: 'CHF',
+    rate: 95.6789,
+  },
+  {
+    label: 'NZD',
+    value: 'NZD',
+    rate: 50.3245,
+  },
+];
 
   accountNumberList = [
     {
@@ -154,26 +159,39 @@ export class AppComponent implements OnInit {
     this.initializeForm();
     this.currencySyncLogic();
     this.amountCalculationLogic();
+     this.accountSelectionLogic();
   }
 
   initializeForm(): void {
     this.validateForm = new FormGroup({
-      firstCurrency: new FormControl('USD', Validators.required),
+      firstCurrency: new FormControl(null,Validators.required),
 
       firstAmount: new FormControl(null, Validators.required),
 
       firstRate: new FormControl({
-        value: 83,
+          value: null,
         disabled: true,
       }),
 
-      firstInrAmount: new FormControl(null, [Validators.required]),
+      firstInrAmount: new FormControl(null, [Validators.required,Validators.pattern(/^\d+(\.\d{1,4})?$/)]),
 
       accountNumber: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]+$/),
       ]),
     });
+
+    this.selecrform = new FormGroup({
+      firstCurrency: new FormControl(null,Validators.required),
+      firstAmount: new FormControl(null, Validators.required),
+      firstRate: new FormControl('',),
+      firstInrAmount: new FormControl(null, [Validators.required,Validators.pattern(/^\d+(\.\d{1,4})?$/)]),
+      accountNumber: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/),
+      ]),
+    });
+
   }
 
   getRate(currency: string): number {
@@ -196,7 +214,8 @@ export class AppComponent implements OnInit {
         );
 
         this.calculateFirstInr();
-      });
+      })
+
   }
 
   amountCalculationLogic(): void {
@@ -212,7 +231,7 @@ export class AppComponent implements OnInit {
 
         this.validateForm.patchValue(
           {
-            firstAmount: Number(amount.toFixed(2)),
+            firstAmount: Number(amount.toFixed(4)),
           },
           {
             emitEvent: false,
@@ -227,12 +246,12 @@ export class AppComponent implements OnInit {
 
     const rate = this.validateForm.getRawValue().firstRate;
 
-    if (amount && rate) {
+    if (rate > 0) {
       const inrAmount = Number(amount) * Number(rate);
 
       this.validateForm.patchValue(
         {
-          firstInrAmount: Number(inrAmount.toFixed(2)),
+          firstInrAmount: Number(inrAmount.toFixed(4)),
         },
         {
           emitEvent: false,
@@ -241,13 +260,30 @@ export class AppComponent implements OnInit {
     }
   }
 
-  submitForm(): void {
+  submitForm(): void {Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+    });
+   
+   
     if (this.validateForm.invalid) {
-      this.validateForm.markAllAsTouched();
+      // this.validateForm.markAllAsTouched();
       return;
     }
+  const data = this.validateForm.getRawValue();
+  const exists = this.tableData.some(
+    item => item.accountNumber === data.accountNumber
+  );
 
-    const data = this.validateForm.getRawValue();
+  if (exists) {this.message.info('Account Number already exists!');
+    return;
+  }
+
+
+
+    
 
     if (this.editIndex !== null) {
       this.tableData[this.editIndex] = data;
@@ -265,6 +301,10 @@ export class AppComponent implements OnInit {
 
     this.resetForm();
   }
+  
+
+
+
 
   editRow(index: number): void {
     this.editIndex = index;
@@ -279,7 +319,9 @@ export class AppComponent implements OnInit {
       accountNumber: row.accountNumber,
     });
   }
-
+  cancel(): void {
+    this.message.info('Deletecancelled');
+  }
   deleteRow(index: number): void {
     this.tableData.splice(index, 1);
 
@@ -299,4 +341,41 @@ export class AppComponent implements OnInit {
 
     this.editIndex = null;
   }
+  accountSelectionLogic(): void {
+  this.selecrform.get('accountNumber')
+    ?.valueChanges.subscribe(accountNo => {
+
+      if (!accountNo) {
+        return;
+      }
+
+      if (this.selecrform.invalid) {
+        return;
+      }
+
+    
+    });
+}
+
+
+addrecord(): void {
+
+  const data = this.selecrform.getRawValue();
+
+  if (!data.accountNumber) {
+    return;
+  }
+
+  const exists = this.tableData.some(
+    item => item.accountNumber === data.accountNumber
+  );
+
+  if (exists) {this.message.info('Account Number already exists!');
+    return;
+  }
+
+  this.tableData = [...this.tableData, data];
+
+  this.selecrform.reset({}, { emitEvent: false });
+}
 }
