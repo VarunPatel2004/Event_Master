@@ -18,7 +18,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-// import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
@@ -59,68 +58,68 @@ export class AppComponent implements OnInit {
 
   editIndex: number | null = null;
 
-currencyList = [
-  {
-    label: 'USD',
-    value: 'USD',
-    rate: 83.3245,
-  },
-  {
-    label: 'INR',
-    value: 'INR',
-    rate: 1.0000,
-  },
-  {
-    label: 'EUR',
-    value: 'EUR',
-    rate: 90.4567,
-  },
-  {
-    label: 'GBP',
-    value: 'GBP',
-    rate: 105.7891,
-  },
-  {
-    label: 'JPY',
-    value: 'JPY',
-    rate: 0.5634,
-  },
-  {
-    label: 'AUD',
-    value: 'AUD',
-    rate: 55.3245,
-  },
-  {
-    label: 'CAD',
-    value: 'CAD',
-    rate: 61.4523,
-  },
-  {
-    label: 'SGD',
-    value: 'SGD',
-    rate: 62.7812,
-  },
-  {
-    label: 'AED',
-    value: 'AED',
-    rate: 22.5678,
-  },
-  {
-    label: 'CNY',
-    value: 'CNY',
-    rate: 11.5432,
-  },
-  {
-    label: 'CHF',
-    value: 'CHF',
-    rate: 95.6789,
-  },
-  {
-    label: 'NZD',
-    value: 'NZD',
-    rate: 50.3245,
-  },
-];
+  currencyList = [
+    {
+      label: 'USD',
+      value: 'USD',
+      rate: 83.3245,
+    },
+    {
+      label: 'INR',
+      value: 'INR',
+      rate: 1.0,
+    },
+    {
+      label: 'EUR',
+      value: 'EUR',
+      rate: 90.4567,
+    },
+    {
+      label: 'GBP',
+      value: 'GBP',
+      rate: 105.7891,
+    },
+    {
+      label: 'JPY',
+      value: 'JPY',
+      rate: 0.5634,
+    },
+    {
+      label: 'AUD',
+      value: 'AUD',
+      rate: 55.3245,
+    },
+    {
+      label: 'CAD',
+      value: 'CAD',
+      rate: 61.4523,
+    },
+    {
+      label: 'SGD',
+      value: 'SGD',
+      rate: 62.7812,
+    },
+    {
+      label: 'AED',
+      value: 'AED',
+      rate: 22.5678,
+    },
+    {
+      label: 'CNY',
+      value: 'CNY',
+      rate: 11.5432,
+    },
+    {
+      label: 'CHF',
+      value: 'CHF',
+      rate: 95.6789,
+    },
+    {
+      label: 'NZD',
+      value: 'NZD',
+      rate: 50.3245,
+    },
+  ];
 
   accountNumberList = [
     {
@@ -157,23 +156,30 @@ currencyList = [
 
   ngOnInit(): void {
     this.initializeForm();
-    this.currencySyncLogic();
-    this.amountCalculationLogic();
-     this.accountSelectionLogic();
+    this.currencySyncLogic(this.validateForm);
+    this.currencySyncLogic(this.selecrform);
+
+    this.amountCalculationLogic(this.validateForm);
+    this.amountCalculationLogic(this.selecrform);
+
+    this.accountSelectionLogic();
   }
 
   initializeForm(): void {
     this.validateForm = new FormGroup({
-      firstCurrency: new FormControl(null,Validators.required),
+      firstCurrency: new FormControl(null, Validators.required),
 
       firstAmount: new FormControl(null, Validators.required),
 
       firstRate: new FormControl({
-          value: null,
+        value: null,
         disabled: true,
       }),
 
-      firstInrAmount: new FormControl(null, [Validators.required,Validators.pattern(/^\d+(\.\d{1,4})?$/)]),
+      firstInrAmount: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(/^\d+(\.\d{1,4})?$/),
+      ]),
 
       accountNumber: new FormControl('', [
         Validators.required,
@@ -182,54 +188,53 @@ currencyList = [
     });
 
     this.selecrform = new FormGroup({
-      firstCurrency: new FormControl(null,Validators.required),
+      firstCurrency: new FormControl(null, Validators.required),
       firstAmount: new FormControl(null, Validators.required),
-      firstRate: new FormControl('',),
-      firstInrAmount: new FormControl(null, [Validators.required,Validators.pattern(/^\d+(\.\d{1,4})?$/)]),
+      firstRate: new FormControl({ value: null, disabled: true }),
+      firstInrAmount: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(/^\d+(\.\d{1,4})?$/),
+      ]),
       accountNumber: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]+$/),
       ]),
     });
-
   }
 
-  getRate(currency: string): number {
-    return this.currencyList.find((x) => x.value === currency)?.rate || 1;
+  getRate(currency: string): number | null {
+    return this.currencyList.find((x) => x.value === currency)?.rate ?? null;
   }
 
-  currencySyncLogic(): void {
-    this.validateForm
-      .get('firstCurrency')
-      ?.valueChanges.subscribe((currency) => {
-        const rate = this.getRate(currency);
+  currencySyncLogic(form: FormGroup): void {
+    form.get('firstCurrency')?.valueChanges.subscribe((currency) => {
+      const rate = this.getRate(currency);
 
-        this.validateForm.patchValue(
-          {
-            firstRate: rate,
-          },
-          {
-            emitEvent: false,
-          }
-        );
+      form.patchValue(
+        {
+          firstRate: rate,
+        },
+        {
+          emitEvent: false,
+        }
+      );
 
-        this.calculateFirstInr();
-      })
-
+      this.calculateFirstInr(form);
+    });
   }
 
-  amountCalculationLogic(): void {
-    this.validateForm.get('firstAmount')?.valueChanges.subscribe(() => {
-      this.calculateFirstInr();
+  amountCalculationLogic(form: FormGroup): void {
+    form.get('firstAmount')?.valueChanges.subscribe(() => {
+      this.calculateFirstInr(form);
     });
 
-    this.validateForm.get('firstInrAmount')?.valueChanges.subscribe((value) => {
-      const rate = this.validateForm.getRawValue().firstRate;
+    form.get('firstInrAmount')?.valueChanges.subscribe((value) => {
+      const rate = form.getRawValue().firstRate;
 
       if (value && rate) {
         const amount = Number(value) / Number(rate);
 
-        this.validateForm.patchValue(
+        form.patchValue(
           {
             firstAmount: Number(amount.toFixed(4)),
           },
@@ -241,15 +246,15 @@ currencyList = [
     });
   }
 
-  calculateFirstInr(): void {
-    const amount = this.validateForm.get('firstAmount')?.value;
+  calculateFirstInr(form: FormGroup): void {
+    const amount = form.get('firstAmount')?.value;
 
-    const rate = this.validateForm.getRawValue().firstRate;
+    const rate = form.getRawValue().firstRate;
 
     if (rate > 0) {
       const inrAmount = Number(amount) * Number(rate);
 
-      this.validateForm.patchValue(
+      form.patchValue(
         {
           firstInrAmount: Number(inrAmount.toFixed(4)),
         },
@@ -260,30 +265,25 @@ currencyList = [
     }
   }
 
-  submitForm(): void {Object.values(this.validateForm.controls).forEach(control => {
+  submitForm(): void {
+    if (this.validateForm.invalid) {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
         }
-    });
-   
-   
-    if (this.validateForm.invalid) {
-      // this.validateForm.markAllAsTouched();
+      });
       return;
     }
-  const data = this.validateForm.getRawValue();
-  const exists = this.tableData.some(
-    item => item.accountNumber === data.accountNumber
-  );
+    const data = this.validateForm.getRawValue();
+    const exists = this.tableData.some(
+      (item) => item.accountNumber === data.accountNumber
+    );
 
-  if (exists) {this.message.info('Account Number already exists!');
-    return;
-  }
-
-
-
-    
+    if (exists) {
+      this.message.info('Account Number already exists!');
+      return;
+    }
 
     if (this.editIndex !== null) {
       this.tableData[this.editIndex] = data;
@@ -301,10 +301,6 @@ currencyList = [
 
     this.resetForm();
   }
-  
-
-
-
 
   editRow(index: number): void {
     this.editIndex = index;
@@ -332,50 +328,68 @@ currencyList = [
 
   resetForm(): void {
     this.validateForm.reset({
-      firstCurrency: 'USD',
+      firstCurrency: null,
       firstAmount: null,
-      firstRate: 83,
+      firstRate: null,
       firstInrAmount: null,
       accountNumber: '',
     });
 
     this.editIndex = null;
   }
+
   accountSelectionLogic(): void {
-  this.selecrform.get('accountNumber')
-    ?.valueChanges.subscribe(accountNo => {
+    this.selecrform
+      .get('accountNumber')
+      ?.valueChanges.subscribe((accountNo) => {
+        if (!accountNo) {
+          return;
+        }
 
-      if (!accountNo) {
-        return;
+        if (this.selecrform.invalid) {
+          return;
+        }
+        this.addrecord();
+      });
+  }
+
+  addrecord(): void {
+    Object.values(this.selecrform.controls).forEach((control) => {
+      if (control.invalid) {
+        control.markAsDirty();
+        control.updateValueAndValidity({ onlySelf: true });
       }
-
-      if (this.selecrform.invalid) {
-        return;
-      }
-
-    
     });
-}
 
+    if (this.selecrform.invalid) {
+      return;
+    }
 
-addrecord(): void {
+    const data = this.selecrform.getRawValue();
 
-  const data = this.selecrform.getRawValue();
+    if (!data.accountNumber) {
+      return;
+    }
 
-  if (!data.accountNumber) {
-    return;
+    const exists = this.tableData.some(
+      (item) => item.accountNumber === data.accountNumber
+    );
+
+    if (exists) {
+      this.message.info('Account Number already exists!');
+      return;
+    }
+
+    this.tableData = [...this.tableData, data];
+    this.message.success('Record Added Succefully');
+
+    this.selecrform.markAsPristine();
+    this.selecrform.markAsUntouched();
+
+    Object.values(this.selecrform.controls).forEach((control) => {
+      control.markAsPristine();
+      control.markAsUntouched();
+      control.updateValueAndValidity({ emitEvent: false });
+    });
   }
-
-  const exists = this.tableData.some(
-    item => item.accountNumber === data.accountNumber
-  );
-
-  if (exists) {this.message.info('Account Number already exists!');
-    return;
-  }
-
-  this.tableData = [...this.tableData, data];
-
-  this.selecrform.reset({}, { emitEvent: false });
-}
 }
