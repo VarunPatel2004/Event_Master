@@ -4,18 +4,25 @@ import { appRoutes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideNzI18n, en_US } from 'ng-zorro-antd/i18n';
 
+import { InboxOutline, UploadOutline } from '@ant-design/icons-angular/icons';
+
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import {
   EditOutline,
   DeleteOutline,
   PlusOutline,
-  SaveOutline
+  SaveOutline,
 } from '@ant-design/icons-angular/icons';
+import { provideHttpClient } from '@angular/common/http';
+
 const icons = [
   EditOutline,
   DeleteOutline,
   PlusOutline,
-  SaveOutline
+  SaveOutline,
+  InboxOutline,
+  UploadOutline,
+
 ];
 
 
@@ -27,5 +34,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideNzIcons(icons),
     provideNzI18n(en_US),
+    provideNzIcons([InboxOutline]),
+    provideHttpClient()
   ],
 };

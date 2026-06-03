@@ -1,266 +1,369 @@
-<nz-card nzTitle="EVENT TAB" class="custom-card">
-  <form nz-form nzLayout="vertical" [formGroup]="selecrform">
-    <div nz-row [nzGutter]="8">
-      <div nz-col nzFlex="0 1 20%">
-        <nz-form-item>
-          <nz-form-label nzRequired>Currency</nz-form-label>
-          <nz-form-control>
-            <nz-input-group nzCompact style="display: flex;">
-              <nz-select formControlName="firstCurrency" nzPlaceHolder=" Currency" nzAllowClear
-                style="width: 85px; min-width: 85px;">
-                @for(item of currencyList;track item.value){
-                <nz-option [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
-                }
-              </nz-select>
+<div class="whole">
 
-              <input nz-input type="number" step="any" formControlName="firstAmount" placeholder="Amount"
-                style="flex: 1;text-align:right;" inputmode="decimal" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzFlex="0 1 20%">
-        <nz-form-item>
-          <nz-form-label>
-            Rate
-          </nz-form-label>
-          <nz-form-control>
+  <div class="container">
 
-            <input style="flex: 1;text-align:right;" nz-input formControlName="firstRate" placeholder="Rate" />
-
-          </nz-form-control>
-
-        </nz-form-item>
-      </div>
-      <div nz-col nzFlex="0 1 20%" nzAlign="middle">
-
-        <nz-form-item>
-
-          <nz-form-label>
-            INR Amount
-          </nz-form-label>
-
-          <nz-form-control>
-
-            <input nz-input step="any" formControlName="firstInrAmount" placeholder="INR Amount"
-              style="flex: 1;text-align:right;" inputmode="decimal" />
-
-          </nz-form-control>
-
-        </nz-form-item>
-
-      </div>
-    </div>
-    <div nz-row [nzGutter]="8">
-      <div nz-col nzFlex="0 1 20%">
-        <nz-form-item>
-          <nz-form-label nzRequired>Account Number</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="accountNumber" nzPlaceHolder="Select Account Number"
-              (ngModelChange)="addrecord()" nzAllowClear>
-              @for (item of accountNumberList; track item.value){
-              <nz-option [nzLabel]="item.value" [nzValue]="item.value"></nz-option>
-              }
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
+    <form nz-form nzLayout="vertical" [formGroup]="applicantForm">
 
 
+      <nz-row [nzGutter]="16">
 
-  </form>
-</nz-card>
+        <nz-col [nzXs]="24" [nzMd]="24" [nzLg]="14">
 
-<!-- <ng-template #extraTemplate>
-      <a>More</a>
-    </ng-template> -->
+          <nz-card nzTitle="Application Form" class="scrollable-card">
+            <nz-collapse>
 
-<nz-card nzTitle="Event Tab" nzBordered="false" style="width:auto">
+              <nz-collapse-panel nzHeader="Applicant Details">
+                <nz-card>
 
-  <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+                  <nz-row [nzGutter]="16">
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Applicant Name
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Applicant Name Required">
+                          <input nz-input formControlName="applicantName" (input)=" onNameInput()">
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Address Line 1
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Address Required">
+                          <input nz-input formControlName="address1">
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Address Line 2
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Address Required">
+                          <input nz-input formControlName="address2">
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+
+                  </nz-row>
+
+                  <nz-row [nzGutter]="16">
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Address Line 3
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Address Required">
+                          <input nz-input formControlName="address3">
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Mobile Number
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Valid Mobile Required">
+                          <input nz-input formControlName="mobile" maxlength="10" (input)="onMobileInput()">
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Email ID
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Valid Email Required">
+                          <input nz-input formControlName="email">
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+
+                  </nz-row>
+
+                </nz-card>
+              </nz-collapse-panel>
+              <!-- Transaction Details -->
+              <nz-collapse-panel nzHeader="Transaction Details">
+                <nz-card>
+                  <nz-row [nzGutter]="16">
+
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Account Number
+                        </nz-form-label>
+
+                        <nz-form-control nzErrorTip="Select Account">
+
+                          <nz-select formControlName="accountNumber" (ngModelChange)="onAccountChange($event)"
+                            nzPlaceHolder="Select Account">
+
+                            <nz-option *ngFor="let item of accountList"
+                              [nzLabel]="item.accountNumber + ' - ' + item.currency" [nzValue]="item.accountNumber">
+                            </nz-option>
+
+                          </nz-select>
+
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>Currency</nz-form-label>
+                        <nz-form-control>
+                          <nz-input-group nzCompact style="display: flex;">
+                            <nz-select nzAllowClear formControlName="currency" nzPlaceHolder=" Currency"
+                              style="width:40%;">
+                              @for(item of currencyList;track item.value){
+                              <nz-option [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+                              }
+                            </nz-select>
+
+                            <input nz-input type="number" step="any" formControlName="amount" placeholder="Amount"
+                              style=" width:60%; flex : 1;text-align:right;" inputmode="decimal" />
+                          </nz-input-group>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label>SOL Details</nz-form-label>
+
+                        <nz-input-group>
+                          <input nz-input style="width: 40%;" formControlName="solId" placeholder="SOL ID" readonly />
+
+                          <input nz-input style="width: 60%;" formControlName="solLocation" placeholder="SOL Location"
+                            readonly />
+                        </nz-input-group>
+
+                      </nz-form-item>
+                    </nz-col>
+                    <nz-col nzFlex="33.3%">
+                      <nz-form-item>
+                        <nz-form-label nzRequired>
+                          Transaction Date
+                        </nz-form-label>
+                        <nz-form-control nzErrorTip="Please select date">
+                          <nz-date-picker formControlName="transactionDate" [nzDisabledDate]="disabledDate"
+                            nzPlaceHolder="Select Date" style="width: 100%;" nzPlaceHolder="DD/MM/YYYY"
+                            nzFormat="dd/MM/yyyy">
+                          </nz-date-picker>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </nz-col>
+                  </nz-row>
+                </nz-card>
+              </nz-collapse-panel>
+
+              <nz-collapse-panel nzHeader="EventTab">
+                <nz-card class="scroll-card">
+
+                  <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+                    <nz-row [nzGutter]="16">
+
+                      <!-- Currency + Amount -->
+                      <nz-col nzFlex="33.33%">
+                        <nz-form-item>
+                          <nz-form-label nzRequired>Account Number</nz-form-label>
+                          <nz-form-control>
+                            <nz-select formControlName="accountNumber2" nzPlaceHolder=" Account Number" nzAllowClear>
+                              @for (item of accountList; track item.accountNumber){
+                              <nz-option [nzLabel]="item.accountNumber" [nzValue]="item.accountNumber"></nz-option>
+                              }
+                            </nz-select>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </nz-col>
+                      <nz-col nzFlex="33.3%">
+                        <nz-form-item>
+                          <nz-form-label nzRequired>Currency</nz-form-label>
+                          <nz-form-control>
+                            <nz-input-group nzCompact style="display: flex;">
+                              <nz-select nzAllowClear formControlName="firstCurrency" nzPlaceHolder=" Currency"
+                                style="width:40%;">
+                                @for(item of currencyList;track item.value){
+                                <nz-option [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+                                }
+                              </nz-select>
+
+                              <input nz-input type="number" step="any" formControlName="firstAmount"
+                                placeholder="Amount" style=" width:60%; flex : 1;text-align:right;"
+                                inputmode="decimal" />
+                            </nz-input-group>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </nz-col>
+
+                      <nz-col nzFlex="33.3%">
+                        <nz-form-item>
+                          <nz-form-label> Rate
+                          </nz-form-label>
+                          <nz-form-control>
+
+                            <input style="flex: 1;text-align:right;" nz-input formControlName="firstRate"
+                              placeholder="Rate" />
+
+                          </nz-form-control>
+
+                        </nz-form-item>
+                      </nz-col>
 
 
-    <div nz-row [nzGutter]="8" nzAlign="middle">
-      <div nz-col nzFlex="25%">
-        <nz-form-item>
-          <nz-form-label nzRequired>Account Number</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="accountNumber" nzPlaceHolder="Select Account Number" nzAllowClear>
-              @for (item of accountNumberList; track item.value){
-              <nz-option [nzLabel]="item.value" [nzValue]="item.value"></nz-option>
-              }
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
 
-      <!-- Currency + Amount -->
-      <div nz-col nzFlex="25%">
-        <nz-form-item>
-          <nz-form-label nzRequired>Currency</nz-form-label>
-          <nz-form-control>
-            <nz-input-group nzCompact style="display: flex;">
-              <nz-select nzAllowClear formControlName="firstCurrency" nzPlaceHolder=" Currency"
-                style="width: 110px; min-width: 110px;">
-                @for(item of currencyList;track item.value){
-                <nz-option [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
-                }
-              </nz-select>
+                      <nz-col nzFlex="33.3%">
+                        <nz-form-item>
 
-              <input nz-input type="number" step="any" formControlName="firstAmount" placeholder="Amount"
-                style="flex: 1;text-align:right;" inputmode="decimal" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
+                          <nz-form-label>
+                            INR Amount
+                          </nz-form-label>
 
+                          <nz-form-control>
 
+                            <input nz-input step="any" formControlName="firstInrAmount" placeholder="INR Amount"
+                              style="flex: 1;text-align:right;" inputmode="decimal" />
 
-      <div nz-col nzFlex="12.5%">
-        <nz-form-item>
-          <nz-form-label> Rate
-          </nz-form-label>
-          <nz-form-control>
+                          </nz-form-control>
 
-            <input style="flex: 1;text-align:right;" nz-input formControlName="firstRate" placeholder="Rate" />
+                        </nz-form-item>
+                      </nz-col>
 
-          </nz-form-control>
+                      <nz-col nz-col nzFlex="10%">
+                        <button nz-button nzType="primary" htmlType="submit" style="margin-top:30px">
 
-        </nz-form-item>
+                          {{ editIndex !== null ? 'Update' : 'Add' }}
 
-      </div>
+                        </button>
+                      </nz-col>
 
-      <div>
-        <div nz-col nzFlex="12.5%" nzAlign="middle">
+                      <nz-table #basicTable [nzData]="tableData" [nzPageSize]="5" [nzBordered]="true"
+                        [nzSize]="'default' " [nzNoResult]=" 'No Data Available'">
 
-          <nz-form-item>
+                        <thead>
+                          <tr>
+                            <th>Sr No</th>
+                            <th>Account Number</th>
+                            <th>Currency</th>
+                            <th>Amount</th>
+                            <th>Rate</th>
+                            <th>INR Amount</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
 
-            <nz-form-label>
-              INR Amount
-            </nz-form-label>
+                        <tbody>
 
-            <nz-form-control>
+                          @for (data of basicTable.data; track $index; let i = $index) {
 
-              <input nz-input step="any" formControlName="firstInrAmount" placeholder="INR Amount"
-                style="flex: 1;text-align:right;" inputmode="decimal" />
+                          <tr>
 
-            </nz-form-control>
+                            <td>{{basicTable.nzPageIndex * basicTable.nzPageSize - basicTable.nzPageSize + i + 1 }}</td>
 
-          </nz-form-item>
+                            <td>{{ data.accountNumber2 }}</td>
 
-        </div>
-      </div>
+                            <td>{{ data.firstCurrency }}</td>
 
+                            <td>{{ data.firstAmount }}</td>
 
-      <div nz-col nzFlex="10%" style="margin-top: 28px;">
-        <div>
-          <nz-form-item>
-            <nz-form-label>
+                            <td>{{ data.firstRate }}</td>
 
-            </nz-form-label>
-            <nz-form-control>
-              <button nz-button nzType="primary" type="submit">
-                {{ editIndex !== null ? 'Update' : 'Add' }}
+                            <td>{{ data.firstInrAmount }}</td>
+
+                            <td>
+
+                              <button type="button" nz-button nzType="link" (click)="editRow(tableData.indexOf(data))">
+                                <span nz-icon nzType="edit"></span>
+                              </button>
+
+                              <button type="button" nz-button nzDanger nzType="link" nz-popconfirm
+                                nzPopconfirmTitle="Are you sure delete this record?"
+                                (nzOnConfirm)="deleteRow(tableData.indexOf(data))">
+                                <span nz-icon nzType="delete"></span>
+                              </button>
+
+                            </td>
+
+                          </tr>
+
+                          }
+
+                        </tbody>
+
+                      </nz-table>
+
+                    </nz-row>
+
+                  </form>
+                </nz-card>
+              </nz-collapse-panel>
+
+            </nz-collapse>
+            <div class="button-section">
+
+              <button nz-button nzType="primary" (click)="submitForm1()">
+
+                Submit
+
               </button>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-    </div>
+
+              <button nz-button nzType="default" (click)="exit()">
+
+                Reset
+
+              </button>
+
+            </div>
+
+          </nz-card>
+        </nz-col>
+
+        <!-- RIGHT SECTION -->
+
+        <nz-col [nzXs]="24" [nzMd]="24" [nzLg]="10">
+          <nz-card nzTitle="Document Upload">
+            <input type="file" (change)="onFileSelected($event)" accept=".pdf,.jpg,.jpeg,.png" />
+          </nz-card>
+        </nz-col>
+
+
+      </nz-row>
+
+
+      <!-- BUTTONS -->
+
+      <!-- <div class="button-section">
+
+        <button nz-button nzType="primary" (click)="submitForm()">
+
+          Submit
+
+        </button>
+
+        <button nz-button nzType="default" (click)="exit()">
+
+          Reset
+
+        </button>
+
+      </div> -->
 
 
 
 
 
 
-    <!-- <div>
-
-      <div>
-        <nz-form-item>
-          <nz-form-label nzRequired>Account Number</nz-form-label>
-          <nz-form-control nzErrorTip="Account Number Required">
-            <nz-select formControlName="accountNumber" nzPlaceHolder="Select Account Number" style="width: 270px">
-              @for (item of accountNumberList; track item.value){
-              <nz-option [nzLabel]="item.value" [nzValue]="item.value"></nz-option>
-              }
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-    </div> -->
-
-
-    <!-- <div nz-row>
-      <div nz-col>
-        <nz-form-item>
-          <nz-form-control>
-            <button nz-button nzType="primary" type="submit">
-              {{ editIndex !== null ? 'Update' : 'Add' }}
-            </button>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div> -->
-
-  </form>
-
-
-  <!-- Table -->
-
-  <nz-table #basicTable [nzData]="tableData" [nzPageSize]="5" [nzBordered]="true" [nzSize]="'middle' "
-    [nzNoResult]=" 'No Data Available'">
-
-    <thead>
-
-      <tr>
-        <th>Sr No </th>
-        <th>Account Number</th>
-        <th>Currency</th>
-        <th>Amount</th>
-        <th>Rate</th>
-        <th>INR Amount</th>
-        <th>Action</th>
-      </tr>
-
-    </thead>
-
-    <tbody>
-      @for(data of basicTable.data; track $index; let i = $index){
-      <!-- *ngFor="let data of tableData; let i = index" -->
-      <tr>
-        <td>{{basicTable.nzPageIndex * basicTable.nzPageSize - basicTable.nzPageSize + i + 1 }}</td>
-        <td>{{ data.accountNumber }}</td>
-        <td>{{ data.firstCurrency }}</td>
-
-        <td>{{ data.firstAmount }}</td>
-
-        <td>{{ data.firstRate }}</td>
-
-        <td>{{ data.firstInrAmount }}</td>
 
 
 
-        <td>
 
-          <button nz-button nzType="link" (click)="editRow(i)">
-            <span nz-icon nzType="edit" nzTheme="outline"></span>
-          </button>
 
-          <button nz-button nzDanger nzType="link" nz-popconfirm nzPopconfirmTitle="Are you sure delete this record?"
-            nzPopconfirmOkText="Yes" nzPopconfirmCancelText="No" (nzOnConfirm)="deleteRow(i)" (nzOnCancel)="cancel()"
-            nzPopconfirmPlacement="top">
-            <span nz-icon nzType="delete" nzTheme="outline"></span>
-          </button>
 
-        </td>
-
-      </tr>
-      }
-
-    </tbody>
-
-  </nz-table>
-
-</nz-card>
+      <router-outlet></router-outlet>

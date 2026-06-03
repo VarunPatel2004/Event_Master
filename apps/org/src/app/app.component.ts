@@ -1,55 +1,78 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  ReactiveFormsModule,
   Validators,
+  ReactiveFormsModule,
+  FormsModule
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
+import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzResultModule } from 'ng-zorro-antd/result';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzUploadChangeParam, NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
+
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
+
+interface AccountData {
+  accountNumber: string;
+  currency: string;
+  solId: string;
+  solLocation: string;
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
+    NzCardModule,
     NzFormModule,
     NzInputModule,
-    NzInputNumberModule,
     NzSelectModule,
     NzButtonModule,
-    NzTableModule,
     NzGridModule,
-    NzResultModule,
-    NzCardModule,
-    NzSpaceModule,
-    // NzIconModule.forRoot(),
-    NzPaginationModule,
+    NzUploadModule,
+    NzMessageModule,
     NzIconModule,
-    NzPopconfirmModule,
+    NzResultModule,
+    NzTableModule,
+    NzDatePickerModule,
+    RouterModule,
+    RouterOutlet,
+    NzCollapseModule,
+    NzPopconfirmModule
+
+
   ],
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  private message = inject(NzMessageService);
 
+  applicantForm!: FormGroup;
+
+  // fileList: NzUploadFile[] = [];
+  uploadedDocuments: File[] = [];
+  submittedRecords: any[] = [];
   validateForm!: FormGroup;
-  selecrform!: FormGroup;
+
   nzPageIndex = 1;
 
   nzPageSize = 10;
@@ -57,115 +80,265 @@ export class AppComponent implements OnInit {
   tableData: any[] = [];
 
   editIndex: number | null = null;
+  date = null;
+  isEnglish = false;
+  fileUrl!: SafeResourceUrl;
+  pdfUrl: SafeResourceUrl | null = null;
+  isImage = false;
 
-  currencyList = [
-    {
-      label: 'USD',
-      value: 'USD',
-      rate: 83.3245,
-    },
-    {
-      label: 'INR',
-      value: 'INR',
-      rate: 1.0,
-    },
-    {
-      label: 'EUR',
-      value: 'EUR',
-      rate: 90.4567,
-    },
-    {
-      label: 'GBP',
-      value: 'GBP',
-      rate: 105.7891,
-    },
-    {
-      label: 'JPY',
-      value: 'JPY',
-      rate: 0.5634,
-    },
-    {
-      label: 'AUD',
-      value: 'AUD',
-      rate: 55.3245,
-    },
-    {
-      label: 'CAD',
-      value: 'CAD',
-      rate: 61.4523,
-    },
-    {
-      label: 'SGD',
-      value: 'SGD',
-      rate: 62.7812,
-    },
-    {
-      label: 'AED',
-      value: 'AED',
-      rate: 22.5678,
-    },
-    {
-      label: 'CNY',
-      value: 'CNY',
-      rate: 11.5432,
-    },
-    {
-      label: 'CHF',
-      value: 'CHF',
-      rate: 95.6789,
-    },
-    {
-      label: 'NZD',
-      value: 'NZD',
-      rate: 50.3245,
-    },
+  isPdf = false;
+  selectedFile: File | null = null;
+
+  currencyList = [{
+    label: 'USD',
+    value: 'USD',
+    rate: 83.3245,
+  },
+  {
+    label: 'INR',
+    value: 'INR',
+    rate: 1.0,
+  },
+  {
+    label: 'EUR',
+    value: 'EUR',
+    rate: 90.4567,
+  },
+  {
+    label: 'GBP',
+    value: 'GBP',
+    rate: 105.7891,
+  },
+  {
+    label: 'JPY',
+    value: 'JPY',
+    rate: 0.5634,
+  },
+  {
+    label: 'AUD',
+    value: 'AUD',
+    rate: 55.3245,
+  },
+  {
+    label: 'CAD',
+    value: 'CAD',
+    rate: 61.4523,
+  },
+  {
+    label: 'SGD',
+    value: 'SGD',
+    rate: 62.7812,
+  },
+  {
+    label: 'AED',
+    value: 'AED',
+    rate: 22.5678,
+  },
+  {
+    label: 'CNY',
+    value: 'CNY',
+    rate: 11.5432,
+  },
+  {
+    label: 'CHF',
+    value: 'CHF',
+    rate: 95.6789,
+  },
+  {
+    label: 'NZD',
+    value: 'NZD',
+    rate: 50.3245,
+  }
   ];
 
-  accountNumberList = [
+
+
+  accountList: AccountData[] = [
     {
-      value: '1002003001',
+      accountNumber: '123456',
+      currency: 'USD',
+      solId: '0123',
+      solLocation: 'Swargate'
     },
     {
-      value: '1002003002',
+      accountNumber: '456789',
+      currency: 'EUR',
+      solId: '0456',
+      solLocation: 'Shivajinagar'
     },
     {
-      value: '1002003003',
+      accountNumber: '789123',
+      currency: 'GBP',
+      solId: '0789',
+      solLocation: 'Hadapsar'
     },
     {
-      value: '1002003004',
+      accountNumber: '111111',
+      currency: 'INR',
+      solId: '0101',
+      solLocation: 'Kothrud'
     },
     {
-      value: '1002003005',
+      accountNumber: '222222',
+      currency: 'USD',
+      solId: '0102',
+      solLocation: 'Baner'
     },
     {
-      value: '1002003006',
+      accountNumber: '333333',
+      currency: 'EUR',
+      solId: '0103',
+      solLocation: 'Aundh'
     },
     {
-      value: '1002003007',
+      accountNumber: '444444',
+      currency: 'GBP',
+      solId: '0104',
+      solLocation: 'Wakad'
     },
     {
-      value: '1002003008',
+      accountNumber: '555555',
+      currency: 'AUD',
+      solId: '0105',
+      solLocation: 'Pimpri'
     },
     {
-      value: '1002003009',
+      accountNumber: '666666',
+      currency: 'CAD',
+      solId: '0106',
+      solLocation: 'Chinchwad'
     },
     {
-      value: '1002003010',
+      accountNumber: '777777',
+      currency: 'SGD',
+      solId: '0107',
+      solLocation: 'Nigdi'
     },
+    {
+      accountNumber: '888888',
+      currency: 'AED',
+      solId: '0108',
+      solLocation: 'Camp'
+    },
+    {
+      accountNumber: '999999',
+      currency: 'CHF',
+      solId: '0109',
+      solLocation: 'Kharadi'
+    },
+    {
+      accountNumber: '121212',
+      currency: 'JPY',
+      solId: '0110',
+      solLocation: 'Magarpatta'
+    },
+    {
+      accountNumber: '232323',
+      currency: 'NZD',
+      solId: '0111',
+      solLocation: 'Viman Nagar'
+    },
+    {
+      accountNumber: '343434',
+      currency: 'USD',
+      solId: '0112',
+      solLocation: 'Yerawada'
+    },
+    {
+      accountNumber: '454545',
+      currency: 'EUR',
+      solId: '0113',
+      solLocation: 'Pashan'
+    },
+    {
+      accountNumber: '565656',
+      currency: 'GBP',
+      solId: '0114',
+      solLocation: 'Bavdhan'
+    },
+    {
+      accountNumber: '676767',
+      currency: 'INR',
+      solId: '0115',
+      solLocation: 'Warje'
+    },
+    {
+      accountNumber: '787878',
+      currency: 'AUD',
+      solId: '0116',
+      solLocation: 'Dhankawadi'
+    },
+    {
+      accountNumber: '898989',
+      currency: 'CAD',
+      solId: '0117',
+      solLocation: 'Sinhagad Road'
+    }
   ];
+
+  constructor(
+    private message: NzMessageService,
+    private sanitizer: DomSanitizer
+
+  ) { }
+
+
+
 
   ngOnInit(): void {
     this.initializeForm();
     this.currencySyncLogic(this.validateForm);
-    this.currencySyncLogic(this.selecrform);
-
+    // this.currencySyncLogic(this.applicantForm);
     this.amountCalculationLogic(this.validateForm);
-    this.amountCalculationLogic(this.selecrform);
+    // this.amountCalculationLogic(this.applicantForm);
 
-    this.accountSelectionLogic();
   }
 
   initializeForm(): void {
+    this.applicantForm = new FormGroup({
+
+      applicantName: new FormControl('', Validators.required),
+
+      address1: new FormControl('', Validators.required),
+
+      address2: new FormControl('', Validators.required),
+
+      address3: new FormControl('', Validators.required),
+
+      mobile: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[0-9]{10}$/)
+      ]),
+
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email
+      ]),
+
+
+      currency: new FormControl('', Validators.required),
+
+      amount: new FormControl(null, [
+        Validators.required,
+        Validators.min(1)
+      ]),
+
+      accountNumber: new FormControl('', Validators.required),
+
+      solId: new FormControl({
+        value: '',
+        disabled: true
+      }),
+
+      solLocation: new FormControl({
+        value: '',
+        disabled: true
+      }),
+      transactionDate: new FormControl(null, Validators.required)
+
+
+    });
+
     this.validateForm = new FormGroup({
       firstCurrency: new FormControl(null, Validators.required),
 
@@ -176,26 +349,13 @@ export class AppComponent implements OnInit {
         disabled: true,
       }),
 
+
       firstInrAmount: new FormControl(null, [
         Validators.required,
         Validators.pattern(/^\d+(\.\d{1,4})?$/),
       ]),
 
-      accountNumber: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[0-9]+$/),
-      ]),
-    });
-
-    this.selecrform = new FormGroup({
-      firstCurrency: new FormControl(null, Validators.required),
-      firstAmount: new FormControl(null, Validators.required),
-      firstRate: new FormControl({ value: null, disabled: true }),
-      firstInrAmount: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^\d+(\.\d{1,4})?$/),
-      ]),
-      accountNumber: new FormControl('', [
+      accountNumber2: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]+$/),
       ]),
@@ -222,7 +382,6 @@ export class AppComponent implements OnInit {
       this.calculateFirstInr(form);
     });
   }
-
   amountCalculationLogic(form: FormGroup): void {
     form.get('firstAmount')?.valueChanges.subscribe(() => {
       this.calculateFirstInr(form);
@@ -245,7 +404,17 @@ export class AppComponent implements OnInit {
       }
     });
   }
+  onNameInput(): void {
+    const control = this.applicantForm.get('applicantName');
 
+    if (control) {
+      const value = (control.value || '')
+        .replace(/[^a-zA-Z ]/g, '')
+        .toUpperCase();
+
+      control.setValue(value, { emitEvent: false });
+    }
+  }
   calculateFirstInr(form: FormGroup): void {
     const amount = form.get('firstAmount')?.value;
 
@@ -264,7 +433,6 @@ export class AppComponent implements OnInit {
       );
     }
   }
-
   submitForm(): void {
     if (this.validateForm.invalid) {
       Object.values(this.validateForm.controls).forEach((control) => {
@@ -277,7 +445,9 @@ export class AppComponent implements OnInit {
     }
     const data = this.validateForm.getRawValue();
     const exists = this.tableData.some(
-      (item) => item.accountNumber === data.accountNumber
+      (item, index) =>
+        item.accountNumber2 === data.accountNumber2 &&
+        index !== this.editIndex
     );
 
     if (exists) {
@@ -303,6 +473,7 @@ export class AppComponent implements OnInit {
   }
 
   editRow(index: number): void {
+    console.log('Edit Clicked', index);
     this.editIndex = index;
 
     const row = this.tableData[index];
@@ -312,13 +483,14 @@ export class AppComponent implements OnInit {
       firstAmount: row.firstAmount,
       firstRate: row.firstRate,
       firstInrAmount: row.firstInrAmount,
-      accountNumber: row.accountNumber,
+      accountNumber2: row.accountNumber2,
     });
   }
   cancel(): void {
     this.message.info('Deletecancelled');
   }
   deleteRow(index: number): void {
+    console.log('delete', index);
     this.tableData.splice(index, 1);
 
     this.tableData = [...this.tableData];
@@ -326,70 +498,352 @@ export class AppComponent implements OnInit {
     this.message.success('Deleted Successfully');
   }
 
-  resetForm(): void {
-    this.validateForm.reset({
-      firstCurrency: null,
-      firstAmount: null,
-      firstRate: null,
-      firstInrAmount: null,
-      accountNumber: '',
+
+
+
+  // addform(): void {
+  //   if (this.validateForm.invalid) {
+  //     Object.values(this.validateForm.controls).forEach((control) => {
+  //       if (control.invalid) {
+  //         control.markAsDirty();
+  //         control.updateValueAndValidity({ onlySelf: true });
+  //       }
+  //     });
+  //     return;
+  //   }
+
+  //   const data = this.validateForm.getRawValue();
+
+  //   // Format Transaction Date
+  //   if (data.transactionDate) {
+  //     const date = new Date(data.transactionDate);
+
+  //     data.transactionDate =
+  //       `${date.getDate().toString().padStart(2, '0')}/` +
+  //       `${(date.getMonth() + 1).toString().padStart(2, '0')}/` +
+  //       `${date.getFullYear()}`;
+  //   }
+
+  //   const exists = this.tableData.some(
+  //     (item) =>
+  //       item.accountNumber2 === data.accountNumber2 &&
+  //       this.editIndex === null
+  //   );
+
+  //   if (exists) {
+  //     this.message.info('Account Number already exists!');
+  //     return;
+  //   }
+
+  //   if (this.editIndex !== null) {
+  //     this.tableData[this.editIndex] = data;
+  //     this.tableData = [...this.tableData];
+  //     this.message.success('Updated Successfully');
+  //     this.editIndex = null;
+  //   } else {
+  //     this.tableData = [...this.tableData, data];
+  //     this.message.success('Added Successfully');
+  //   }
+
+  //   console.log(this.tableData);
+  //   this.resetForm();
+  // }
+
+
+  // editRow(index: number): void {
+  //   this.editIndex = index;
+
+  //   const row = this.tableData[index];
+
+  //   this.validateForm.patchValue({
+  //     firstCurrency: row.firstCurrency,
+  //     firstAmount: row.firstAmount,
+  //     firstRate: row.firstRate,
+  //     firstInrAmount: row.firstInrAmount,
+  //     accountNumber2: row.accountNumber2,
+  //   });
+  // }
+  // cancel(): void {
+  //   this.message.info('Deletecancelled');
+  // }
+  // deleteRow(index: number): void {
+  //   this.tableData.splice(index, 1);
+
+  //   this.tableData = [...this.tableData];
+
+  //   this.message.success('Deleted Successfully');
+  // }
+
+  onAccountChange(accountNumber: string): void {
+
+    const selectedAccount = this.accountList.find(
+      account =>
+        account.accountNumber === accountNumber
+    );
+
+    if (selectedAccount) {
+
+      this.applicantForm.patchValue({
+        currency: selectedAccount.currency,
+        solId: selectedAccount.solId,
+        solLocation: selectedAccount.solLocation
+      });
+
+    }
+  }
+
+  // beforeUpload = (file: NzUploadFile): boolean => {
+
+  //   this.fileList = [...this.fileList, file];
+
+  //   if (file.type === 'application/pdf') {
+
+  //     const pdfBlobUrl = URL.createObjectURL(file as any);
+
+  //     this.pdfUrl =
+  //       this.sanitizer.bypassSecurityTrustResourceUrl(pdfBlobUrl);
+  //   }
+
+  //   return false;
+  // };
+
+  // removeFile = (file: NzUploadFile): boolean => {
+
+  //   this.fileList = this.fileList.filter(
+  //     item => item.uid !== file.uid
+  //   );
+
+  //   this.pdfUrl = null;
+
+  //   return true;
+  // };
+
+  // handleChange(info: NzUploadChangeParam): void {
+
+  //   this.fileList = [...info.fileList];
+
+  //   if (info.file.status === 'done') {
+  //     this.message.success(`${info.file.name} uploaded successfully`);
+  //   }
+
+  //   if (info.file.status === 'error') {
+  //     this.message.error(`${info.file.name} upload failed`);
+  //   }
+  // }
+
+  submitForm1(): void {
+
+    Object.values(
+      this.applicantForm.controls
+    ).forEach(control => {
+
+      control.markAsDirty();
+
+      control.updateValueAndValidity();
+
     });
 
-    this.editIndex = null;
-  }
 
-  accountSelectionLogic(): void {
-    this.selecrform
-      .get('accountNumber')
-      ?.valueChanges.subscribe((accountNo) => {
-        if (!accountNo) {
-          return;
-        }
+    Object.keys(this.applicantForm.controls).forEach(key => {
+      const control = this.applicantForm.get(key);
 
-        if (this.selecrform.invalid) {
-          return;
-        }
-        this.addrecord();
-      });
-  }
-
-  addrecord(): void {
-    Object.values(this.selecrform.controls).forEach((control) => {
-      if (control.invalid) {
-        control.markAsDirty();
-        control.updateValueAndValidity({ onlySelf: true });
+      if (control?.invalid) {
+        console.log('Invalid Field:', key);
+        console.log('Value:', control.value);
+        console.log('Errors:', control.errors);
       }
     });
 
-    if (this.selecrform.invalid) {
+    if (this.applicantForm.invalid) {
+
+      this.message.error(
+        'Please fill all mandatory fields'
+      );
+
       return;
     }
 
-    const data = this.selecrform.getRawValue();
+    // if (this.fileList.length === 0) {
 
-    if (!data.accountNumber) {
-      return;
-    }
+    //   this.message.error(
+    //     'Please upload at least one document'
+    //   );
 
-    const exists = this.tableData.some(
-      (item) => item.accountNumber === data.accountNumber
+    //   return;
+    // }
+    const event = this.validateForm.getRawValue();
+    const eventdata = {
+      accountNumber2: event.accountNumber2,
+      firstCurrency: event.firstCurrency,
+      firstAmount: event.firstAmount,
+      firstRate: event.firstRate,
+      firstInrAmount: event.firstInrAmount
+    };
+    const formData =
+      this.applicantForm.getRawValue();
+
+    const payload = {
+
+      applicantName:
+        formData.applicantName,
+
+      address1:
+        formData.address1,
+
+      address2:
+        formData.address2,
+
+      address3:
+        formData.address3,
+
+      mobile:
+        formData.mobile,
+
+      email:
+        formData.email,
+
+      currency:
+        formData.currency,
+
+      amount:
+        formData.amount,
+
+      accountNumber:
+        formData.accountNumber,
+
+      solId:
+        formData.solId,
+
+      solLocation:
+        formData.solLocation,
+
+      // documents:
+      //   this.fileList.map(file => ({
+      //     fileName: file.name
+      //   }))
+      // documents: []
+      documents: this.selectedFile
+        ? [{ fileName: this.selectedFile.name }]
+        : []
+    };
+
+    this.submittedRecords.push(payload);
+    this.submittedRecords.push(eventdata);
+
+    console.log(
+      'Current Record',
+      payload
     );
 
-    if (exists) {
-      this.message.info('Account Number already exists!');
-      return;
+    console.log(
+      'All Records',
+      this.submittedRecords
+    );
+
+    this.message.success(
+      'Record Submitted Successfully'
+    );
+
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.applicantForm.reset();
+    this.validateForm.reset();
+
+    this.editIndex = null;
+    this.uploadedDocuments = [];
+    this.selectedFile = null;
+    this.isPdf = false;
+    this.pdfUrl = null;
+
+
+  }
+
+  exit(): void {
+
+    this.resetForm();
+
+    this.message.info(
+      'Form Cleared'
+    );
+
+  }
+  disabledDate = (current: Date): boolean => {
+    return current > new Date();
+
+  }
+
+  // onFileSelected(event: Event): void {
+
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (!input.files || input.files.length === 0) {
+  //     return;
+  //   }
+
+  //   const file = input.files[0];
+
+  //   this.selectedFile = file;
+
+  //   const objectUrl = URL.createObjectURL(file);
+
+  //   this.isPdf = file.type === 'application/pdf';
+
+  //   this.fileUrl =
+  //     this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+  // }
+
+  // onFileSelected(event: Event): void {
+
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (!input.files || input.files.length === 0) {
+  //     return;
+  //   }
+
+  //   const file = input.files[0];
+
+  //   this.selectedFile = file;
+
+  //   const url = URL.createObjectURL(file);
+
+  //   this.isPdf = file.type === 'application/pdf';
+
+  //   this.fileUrl = url;
+
+  //   console.log(file);
+  // }
+
+
+  payload: any = {
+    document: null
+  };
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+
+    if (file) {
+      this.selectedFile = file;
+      this.payload.document = file;
     }
+  }
 
-    this.tableData = [...this.tableData, data];
-    this.message.success('Record Added Succefully');
 
-    this.selecrform.markAsPristine();
-    this.selecrform.markAsUntouched();
+  onMobileInput(): void {
+    const control = this.applicantForm.get('mobile');
 
-    Object.values(this.selecrform.controls).forEach((control) => {
-      control.markAsPristine();
-      control.markAsUntouched();
-      control.updateValueAndValidity({ emitEvent: false });
-    });
+    if (control) {
+      const value = (control.value || '')
+        .replace(/\D/g, '') // remove non-numeric characters
+        .slice(0, 10);      // limit to 10 digits
+
+      control.setValue(value, { emitEvent: false });
+    }
   }
 }
+
+
+
+
+
