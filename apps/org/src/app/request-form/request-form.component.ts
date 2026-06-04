@@ -28,6 +28,17 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.state';
+import { selectApplicantForm, selectEventTable, } from '../store/applicant/applicant.selectors';
+import { Observable } from 'rxjs';
+import {
+  addEventData,
+  deleteEventData,
+  saveApplicantForm,
+  uploadFile,
+  updateEventData
+} from '../store/applicant/applicant.actions';
 
 interface AccountData {
   accountNumber: string;
@@ -58,7 +69,9 @@ interface AccountData {
     RouterModule,
     RouterOutlet,
     NzCollapseModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+
+
 
 
   ],
@@ -67,6 +80,8 @@ interface AccountData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestFormComponent implements OnInit {
+  applicantData$!: Observable<any>;
+  tableData$!: Observable<any>;
 
   applicantForm!: FormGroup;
 
@@ -90,6 +105,9 @@ export class RequestFormComponent implements OnInit {
 
   isPdf = false;
   selectedFile: File | null = null;
+
+
+
 
   currencyList = [{
     label: 'USD',
@@ -277,17 +295,19 @@ export class RequestFormComponent implements OnInit {
       solLocation: 'Sinhagad Road'
     }
   ];
-
   constructor(
     private message: NzMessageService,
-    private sanitizer: DomSanitizer
+    // private sanitizer: DomSanitizer,
+    private store: Store<AppState>
 
   ) { }
 
-
-
-
   ngOnInit(): void {
+    this.tableData$ = this.store.select(selectEventTable);
+    this.tableData$.subscribe(data => {
+      this.tableData = data;
+    });
+    this.applicantData$ = this.store.select(selectApplicantForm);
     this.initializeForm();
     this.currencySyncLogic(this.validateForm);
     // this.currencySyncLogic(this.applicantForm);
@@ -295,21 +315,13 @@ export class RequestFormComponent implements OnInit {
     // this.amountCalculationLogic(this.applicantForm);
 
   }
-
   initializeForm(): void {
     this.applicantForm = new FormGroup({
-
       applicantName: new FormControl('', Validators.required),
-
       address1: new FormControl('', Validators.required),
-
       address2: new FormControl('', Validators.required),
-
       address3: new FormControl('', Validators.required),
-
-      mobile: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[0-9]{10}$/)
+      mobile: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/)
       ]),
 
       email: new FormControl('', [
@@ -458,19 +470,19 @@ export class RequestFormComponent implements OnInit {
     }
 
     if (this.editIndex !== null) {
-      this.tableData[this.editIndex] = data;
-
-      this.tableData = [...this.tableData];
-
-      this.message.success('Updated Successfully');
-
-      this.editIndex = null;
+      this.store.dispatch(
+        updateEventData({
+          index: this.editIndex,
+          row: data
+        })
+      );
     } else {
-      this.tableData = [...this.tableData, data];
-
-      this.message.success('Added Successfully');
+      this.store.dispatch(
+        addEventData({
+          row: data
+        })
+      );
     }
-
     this.validateForm.reset();
   }
 
@@ -493,158 +505,38 @@ export class RequestFormComponent implements OnInit {
   }
   deleteRow(index: number): void {
     console.log('delete', index);
-    this.tableData.splice(index, 1);
-
+    // this.tableData.splice(index, 1);
+    this.store.dispatch(
+      deleteEventData({
+        index
+      })
+    );
     this.tableData = [...this.tableData];
-
     this.message.success('Deleted Successfully');
   }
 
 
-
-
-  // addform(): void {
-  //   if (this.validateForm.invalid) {
-  //     Object.values(this.validateForm.controls).forEach((control) => {
-  //       if (control.invalid) {
-  //         control.markAsDirty();
-  //         control.updateValueAndValidity({ onlySelf: true });
-  //       }
-  //     });
-  //     return;
-  //   }
-
-  //   const data = this.validateForm.getRawValue();
-
-  //   // Format Transaction Date
-  //   if (data.transactionDate) {
-  //     const date = new Date(data.transactionDate);
-
-  //     data.transactionDate =
-  //       `${date.getDate().toString().padStart(2, '0')}/` +
-  //       `${(date.getMonth() + 1).toString().padStart(2, '0')}/` +
-  //       `${date.getFullYear()}`;
-  //   }
-
-  //   const exists = this.tableData.some(
-  //     (item) =>
-  //       item.accountNumber2 === data.accountNumber2 &&
-  //       this.editIndex === null
-  //   );
-
-  //   if (exists) {
-  //     this.message.info('Account Number already exists!');
-  //     return;
-  //   }
-
-  //   if (this.editIndex !== null) {
-  //     this.tableData[this.editIndex] = data;
-  //     this.tableData = [...this.tableData];
-  //     this.message.success('Updated Successfully');
-  //     this.editIndex = null;
-  //   } else {
-  //     this.tableData = [...this.tableData, data];
-  //     this.message.success('Added Successfully');
-  //   }
-
-  //   console.log(this.tableData);
-  //   this.resetForm();
-  // }
-
-
-  // editRow(index: number): void {
-  //   this.editIndex = index;
-
-  //   const row = this.tableData[index];
-
-  //   this.validateForm.patchValue({
-  //     firstCurrency: row.firstCurrency,
-  //     firstAmount: row.firstAmount,
-  //     firstRate: row.firstRate,
-  //     firstInrAmount: row.firstInrAmount,
-  //     accountNumber2: row.accountNumber2,
-  //   });
-  // }
-  // cancel(): void {
-  //   this.message.info('Deletecancelled');
-  // }
-  // deleteRow(index: number): void {
-  //   this.tableData.splice(index, 1);
-
-  //   this.tableData = [...this.tableData];
-
-  //   this.message.success('Deleted Successfully');
-  // }
-
   onAccountChange(accountNumber: string): void {
-
     const selectedAccount = this.accountList.find(
       account =>
         account.accountNumber === accountNumber
     );
-
     if (selectedAccount) {
-
       this.applicantForm.patchValue({
         currency: selectedAccount.currency,
         solId: selectedAccount.solId,
         solLocation: selectedAccount.solLocation
       });
-
     }
   }
 
-  // beforeUpload = (file: NzUploadFile): boolean => {
-
-  //   this.fileList = [...this.fileList, file];
-
-  //   if (file.type === 'application/pdf') {
-
-  //     const pdfBlobUrl = URL.createObjectURL(file as any);
-
-  //     this.pdfUrl =
-  //       this.sanitizer.bypassSecurityTrustResourceUrl(pdfBlobUrl);
-  //   }
-
-  //   return false;
-  // };
-
-  // removeFile = (file: NzUploadFile): boolean => {
-
-  //   this.fileList = this.fileList.filter(
-  //     item => item.uid !== file.uid
-  //   );
-
-  //   this.pdfUrl = null;
-
-  //   return true;
-  // };
-
-  // handleChange(info: NzUploadChangeParam): void {
-
-  //   this.fileList = [...info.fileList];
-
-  //   if (info.file.status === 'done') {
-  //     this.message.success(`${info.file.name} uploaded successfully`);
-  //   }
-
-  //   if (info.file.status === 'error') {
-  //     this.message.error(`${info.file.name} upload failed`);
-  //   }
-  // }
-
   submitForm1(): void {
-
     Object.values(
       this.applicantForm.controls
     ).forEach(control => {
-
       control.markAsDirty();
-
       control.updateValueAndValidity();
-
     });
-
 
     Object.keys(this.applicantForm.controls).forEach(key => {
       const control = this.applicantForm.get(key);
@@ -657,22 +549,12 @@ export class RequestFormComponent implements OnInit {
     });
 
     if (this.applicantForm.invalid) {
-
       this.message.error(
         'Please fill all mandatory fields'
       );
-
       return;
     }
 
-    // if (this.fileList.length === 0) {
-
-    //   this.message.error(
-    //     'Please upload at least one document'
-    //   );
-
-    //   return;
-    // }
     const formData =
       this.applicantForm.getRawValue();
 
@@ -683,135 +565,78 @@ export class RequestFormComponent implements OnInit {
       address3: formData.address3,
       mobile: formData.mobile,
       email: formData.email,
-
-      currency:
-        formData.currency,
-
-      amount:
-        formData.amount,
-
-      accountNumber:
-        formData.accountNumber,
-
-      solId:
-        formData.solId,
-
-      solLocation:
-        formData.solLocation,
-
+      currency: formData.currency,
+      amount: formData.amount,
+      accountNumber: formData.accountNumber,
+      solId: formData.solId,
+      solLocation: formData.solLocation,
       documents: this.selectedFile
         ? [{ fileName: this.selectedFile.name }]
         : []
     };
 
     const txnDetails = {
-      ...payload,
-      eventData: [...this.tableData]
+      ...payload
+      // ,      eventData: [...this.tableData]
     }
-
-    console.log(
-      'Current Record',
-      txnDetails
+    this.store.dispatch(
+      saveApplicantForm({
+        formData: txnDetails
+      })
     );
-
-    this.message.success(
-      'Record Submitted Successfully'
-    );
-
+    console.log('Current Record', txnDetails);
+    this.message.success('Record Submitted Successfully');
     this.resetForm();
   }
 
   resetForm(): void {
     this.applicantForm.reset();
     this.validateForm.reset();
-
     this.editIndex = null;
     this.uploadedDocuments = [];
     this.selectedFile = null;
     this.isPdf = false;
     this.pdfUrl = null;
-
-
   }
 
   exit(): void {
-
     this.resetForm();
-
     this.message.info(
-      'Form Cleared'
-    );
-
+      'Form Cleared');
   }
   disabledDate = (current: Date): boolean => {
     return current > new Date();
-
   }
-
-  // onFileSelected(event: Event): void {
-
-  //   const input = event.target as HTMLInputElement;
-
-  //   if (!input.files || input.files.length === 0) {
-  //     return;
-  //   }
-
-  //   const file = input.files[0];
-
-  //   this.selectedFile = file;
-
-  //   const objectUrl = URL.createObjectURL(file);
-
-  //   this.isPdf = file.type === 'application/pdf';
-
-  //   this.fileUrl =
-  //     this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
-  // }
-
-  // onFileSelected(event: Event): void {
-
-  //   const input = event.target as HTMLInputElement;
-
-  //   if (!input.files || input.files.length === 0) {
-  //     return;
-  //   }
-
-  //   const file = input.files[0];
-
-  //   this.selectedFile = file;
-
-  //   const url = URL.createObjectURL(file);
-
-  //   this.isPdf = file.type === 'application/pdf';
-
-  //   this.fileUrl = url;
-
-  //   console.log(file);
-  // }
-
-
   payload: any = {
     document: null
   };
 
   onFileSelected(event: any): void {
+
     const file = event.target.files[0];
 
     if (file) {
+
       this.selectedFile = file;
+
       this.payload.document = file;
+
+      this.store.dispatch(
+        uploadFile({
+          fileName: file.name
+        })
+      );
+
     }
   }
 
 
   onMobileInput(): void {
     const control = this.applicantForm.get('mobile');
-
     if (control) {
       const value = (control.value || '')
-        .replace(/\D/g, '') // remove non-numeric characters
-        .slice(0, 10);      // limit to 10 digits
-
+        .replace(/\D/g, '')
+        .slice(0, 10);
       control.setValue(value, { emitEvent: false });
     }
   }
@@ -821,3 +646,191 @@ export class RequestFormComponent implements OnInit {
 
 
 
+// beforeUpload = (file: NzUploadFile): boolean => {
+
+//   this.fileList = [...this.fileList, file];
+
+//   if (file.type === 'application/pdf') {
+
+//     const pdfBlobUrl = URL.createObjectURL(file as any);
+
+//     this.pdfUrl =
+//       this.sanitizer.bypassSecurityTrustResourceUrl(pdfBlobUrl);
+//   }
+
+//   return false;
+// };
+
+// removeFile = (file: NzUploadFile): boolean => {
+
+//   this.fileList = this.fileList.filter(
+//     item => item.uid !== file.uid
+//   );
+
+//   this.pdfUrl = null;
+
+//   return true;
+// };
+
+// handleChange(info: NzUploadChangeParam): void {
+
+//   this.fileList = [...info.fileList];
+
+//   if (info.file.status === 'done') {
+//     this.message.success(`${info.file.name} uploaded successfully`);
+//   }
+
+//   if (info.file.status === 'error') {
+//     this.message.error(`${info.file.name} upload failed`);
+//   }
+// }
+
+
+
+
+// onFileSelected(event: Event): void {
+
+//   const input = event.target as HTMLInputElement;
+
+//   if (!input.files || input.files.length === 0) {
+//     return;
+//   }
+
+//   const file = input.files[0];
+
+//   this.selectedFile = file;
+
+//   const objectUrl = URL.createObjectURL(file);
+
+//   this.isPdf = file.type === 'application/pdf';
+
+//   this.fileUrl =
+//     this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+// }
+
+// onFileSelected(event: Event): void {
+
+//   const input = event.target as HTMLInputElement;
+
+//   if (!input.files || input.files.length === 0) {
+//     return;
+//   }
+
+//   const file = input.files[0];
+
+//   this.selectedFile = file;
+
+//   const url = URL.createObjectURL(file);
+
+//   this.isPdf = file.type === 'application/pdf';
+
+//   this.fileUrl = url;
+
+//   console.log(file);
+// }
+
+
+
+// if (this.fileList.length === 0) {
+
+//   this.message.error(
+//     'Please upload at least one document'
+//   );
+
+//   return;
+// }
+
+
+
+
+
+
+
+
+// addform(): void {
+//   if (this.validateForm.invalid) {
+//     Object.values(this.validateForm.controls).forEach((control) => {
+//       if (control.invalid) {
+//         control.markAsDirty();
+//         control.updateValueAndValidity({ onlySelf: true });
+//       }
+//     });
+//     return;
+//   }
+
+//   const data = this.validateForm.getRawValue();
+
+//   // Format Transaction Date
+//   if (data.transactionDate) {
+//     const date = new Date(data.transactionDate);
+
+//     data.transactionDate =
+//       `${date.getDate().toString().padStart(2, '0')}/` +
+//       `${(date.getMonth() + 1).toString().padStart(2, '0')}/` +
+//       `${date.getFullYear()}`;
+//   }
+
+//   const exists = this.tableData.some(
+//     (item) =>
+//       item.accountNumber2 === data.accountNumber2 &&
+//       this.editIndex === null
+//   );
+
+//   if (exists) {
+//     this.message.info('Account Number already exists!');
+//     return;
+//   }
+
+//   if (this.editIndex !== null) {
+//     this.tableData[this.editIndex] = data;
+//     this.tableData = [...this.tableData];
+//     this.message.success('Updated Successfully');
+//     this.editIndex = null;
+//   } else {
+//     this.tableData = [...this.tableData, data];
+//     this.message.success('Added Successfully');
+//   }
+
+//   console.log(this.tableData);
+//   this.resetForm();
+// }
+
+
+// editRow(index: number): void {
+//   this.editIndex = index;
+
+//   const row = this.tableData[index];
+
+//   this.validateForm.patchValue({
+//     firstCurrency: row.firstCurrency,
+//     firstAmount: row.firstAmount,
+//     firstRate: row.firstRate,
+//     firstInrAmount: row.firstInrAmount,
+//     accountNumber2: row.accountNumber2,
+//   });
+// }
+// cancel(): void {
+//   this.message.info('Deletecancelled');
+// }
+// deleteRow(index: number): void {
+//   this.tableData.splice(index, 1);
+
+//   this.tableData = [...this.tableData];
+
+//   this.message.success('Deleted Successfully');
+// }
+
+// if (this.editIndex !== null) {
+//   this.tableData[this.editIndex] = data;
+
+//   // this.tableData = [...this.tableData];
+//   this.store.dispatch(addEventData({ row: data }));
+
+//   this.message.success('Updated Successfully');
+
+//   this.editIndex = null;
+// } else {
+//   this.tableData = [...this.tableData, data];
+
+//   this.message.success('Added Successfully');
+// }

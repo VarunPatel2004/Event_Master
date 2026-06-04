@@ -15,6 +15,12 @@ import {
 } from '@ant-design/icons-angular/icons';
 import { provideHttpClient } from '@angular/common/http';
 
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+import { reducers, metaReducers } from './store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+
+
 const icons = [
   EditOutline,
   DeleteOutline,
@@ -22,19 +28,22 @@ const icons = [
   SaveOutline,
   InboxOutline,
   UploadOutline,
-
 ];
-
-
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideEffects(),
+
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideAnimations(),
     provideNzIcons(icons),
     provideNzI18n(en_US),
     provideNzIcons([InboxOutline]),
-    provideHttpClient()
+    provideHttpClient(),
+    provideStore(reducers, { metaReducers }),
+    provideStoreDevtools({
+      maxAge: 25
+    })
   ],
 };
