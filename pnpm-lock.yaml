@@ -38,9 +38,30 @@ importers:
       '@ctrl/tinycolor':
         specifier: ^4.2.0
         version: 4.2.0
+      '@ngrx/component-store':
+        specifier: ^18.0.2
+        version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      '@ngrx/effects':
+        specifier: ^18.0.2
+        version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)
+      '@ngrx/entity':
+        specifier: ^18.0.2
+        version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)
+      '@ngrx/router-store':
+        specifier: ^18.0.2
+        version: 18.1.1(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/router@18.2.14(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)
+      '@ngrx/store':
+        specifier: ^18.0.2
+        version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      '@ngrx/store-devtools':
+        specifier: ^18.1.1
+        version: 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)
       ng-zorro-antd:
         specifier: ^18.2.1
         version: 18.2.1(f9ff5a9986df8498ddf45d5793f17baa)
+      ngrx-store-localstorage:
+        specifier: ^20.1.0
+        version: 20.1.0(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))
       pnpm:
         specifier: ^11.4.0
         version: 11.4.0
@@ -72,6 +93,9 @@ importers:
       '@eslint/js':
         specifier: ^9.8.0
         version: 9.39.4
+      '@ngrx/schematics':
+        specifier: ^18.0.2
+        version: 18.1.1
       '@nx/angular':
         specifier: 19.8.14
         version: 19.8.14(44dfa2ddfb9d9ae14017902a959e743d)
@@ -132,6 +156,9 @@ importers:
       eslint-plugin-cypress:
         specifier: ^3.5.0
         version: 3.6.0(eslint@9.39.4(jiti@1.21.7))
+      jasmine-marbles:
+        specifier: ~0.9.1
+        version: 0.9.2(rxjs@7.8.2)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@18.16.9)(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.23))(@types/node@18.16.9)(typescript@5.5.4))
@@ -2158,6 +2185,51 @@ packages:
 
   '@napi-rs/wasm-runtime@0.2.4':
     resolution: {integrity: sha512-9zESzOO5aDByvhIAsOy9TbpZ0Ur2AJbUI7UT73kcUTS2mxAMHOBaa1st/jAymNoCtvrit99kkzT1FZuXVcgfIQ==}
+
+  '@ngrx/component-store@18.1.1':
+    resolution: {integrity: sha512-+FDd44D+unx/eE/7qCyK1IDsTu8503JOnj3lEhL9f9TDmE4arDNqeNx/8Sh3V3HDkH7mVC9iV0c538ACGlvWIA==}
+    peerDependencies:
+      '@angular/core': ^18.0.0
+      rxjs: ^6.5.3 || ^7.5.0
+
+  '@ngrx/effects@18.1.1':
+    resolution: {integrity: sha512-XXob8kYEvYMaZwgHtrrTW0XZargbu5PloEpNHLnzB8jPk0yWEw6keryxaF09Ylws1779MWvMmF/YP2rPl04nHQ==}
+    peerDependencies:
+      '@angular/core': ^18.0.0
+      '@ngrx/store': 18.1.1
+      rxjs: ^6.5.3 || ^7.5.0
+
+  '@ngrx/entity@18.1.1':
+    resolution: {integrity: sha512-oRt/wG+szR4lMvMut16uWfbMD2CnOMscnQIbU+lcOs5+UDOzr4aHGBVpErzcoVWSTp/sl7x02j+2dto5NQZWoA==}
+    peerDependencies:
+      '@angular/core': ^18.0.0
+      '@ngrx/store': 18.1.1
+      rxjs: ^6.5.3 || ^7.5.0
+
+  '@ngrx/router-store@18.1.1':
+    resolution: {integrity: sha512-S1/09T8EJHso1keOZ2Q3hb1oAsdJ/FSEWkn24yWJXftbXOKJq1jnrYhNaVm5gPnxGzdQ1mqRtLuMKaDClyxP5A==}
+    peerDependencies:
+      '@angular/common': ^18.0.0
+      '@angular/core': ^18.0.0
+      '@angular/router': ^18.0.0
+      '@ngrx/store': 18.1.1
+      rxjs: ^6.5.3 || ^7.5.0
+
+  '@ngrx/schematics@18.1.1':
+    resolution: {integrity: sha512-6EexKNoTNzwHf8AIXcioOm11l6rTZ8WUpGYiPTSW2I/Pn5CsjCBDwbBDEHJZ1RqGoCXpunZn6adH63A2V8V4Sg==}
+
+  '@ngrx/store-devtools@18.1.1':
+    resolution: {integrity: sha512-tfn9Ms1q2bl7VDWwHyj7dUbwmGiiVzIpOKZs39rsms8tG8hbvsxoczyQAp2w5erVtoJb8ltIh1/birKkS7HmuQ==}
+    peerDependencies:
+      '@angular/core': ^18.0.0
+      '@ngrx/store': 18.1.1
+      rxjs: ^6.5.3 || ^7.5.0
+
+  '@ngrx/store@18.1.1':
+    resolution: {integrity: sha512-K0v1akJ2sEnIeb1AUA064+ksgRgbMgVG9HbSsLBxENbFjK2ZvKRxo1bpOw6WHW9+hyDTlhZGl7+gUtjmo3497g==}
+    peerDependencies:
+      '@angular/core': ^18.0.0
+      rxjs: ^6.5.3 || ^7.5.0
 
   '@ngtools/webpack@18.2.21':
     resolution: {integrity: sha512-mfLT7lXbyJRlsazuPyuF5AGsMcgzRJRwsDlgxFbiy1DBlaF1chRFsXrKYj1gQ/WXQWNcEd11aedU0Rt+iCNDVw==}
@@ -5008,6 +5080,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  jasmine-marbles@0.9.2:
+    resolution: {integrity: sha512-T7RjG4fRsdiGGzbQZ6Kj39qYt6O1/KIcR4FkUNsD3DUGkd/AzpwzN+xtk0DXlLWEz5BaVdK1SzMgQDVw879c4Q==}
+    peerDependencies:
+      rxjs: ^7.0.0
+
   jest-changed-files@29.7.0:
     resolution: {integrity: sha512-fEArFiwf1BpQ+4bXSprcDc3/x4HSzL4al2tozwVpDFpsxALjLYdyiIK4e5Vz66GQJIbXJ82+35PtysofptNX2w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5669,6 +5746,13 @@ packages:
       '@angular/forms': ^18.0.0
       '@angular/platform-browser': ^18.0.0
       '@angular/router': ^18.0.0
+
+  ngrx-store-localstorage@20.1.0:
+    resolution: {integrity: sha512-/5+i5qTxZdE8Q5qdSmj7+9JvriAnHwW7RsXzh1rrQ/UHA9vf12q6mJ6wYTTehUO4Qcl2t/K5MRkooN2eG2ZEvw==}
+    peerDependencies:
+      '@angular/common': '>=20.0.0'
+      '@angular/core': '>=20.0.0'
+      '@ngrx/store': '>=20.0.0'
 
   nice-napi@1.0.2:
     resolution: {integrity: sha512-px/KnJAJZf5RuBGcfD+Sp2pAKq0ytz8j+1NehvgIGFkvtvFrDM3T8E4x/JJODXK9WZow8RRGrbA9QQ3hs+pDhA==}
@@ -10399,6 +10483,50 @@ snapshots:
       '@emnapi/runtime': 1.10.0
       '@tybys/wasm-util': 0.9.0
 
+  '@ngrx/component-store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngrx/effects@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngrx/entity@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngrx/router-store@18.1.1(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/router@18.2.14(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/common': 18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      '@angular/router': 18.2.14(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@angular/platform-browser@18.2.14(@angular/animations@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(rxjs@7.8.2)
+      '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngrx/schematics@18.1.1': {}
+
+  '@ngrx/store-devtools@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
   '@ngtools/webpack@18.2.21(@angular/compiler-cli@18.2.14(@angular/compiler@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(typescript@5.5.4))(typescript@5.5.4)(webpack@5.94.0(@swc/core@1.5.29(@swc/helpers@0.5.23))(esbuild@0.23.0)(postcss@8.4.41))':
     dependencies:
       '@angular/compiler-cli': 18.2.14(@angular/compiler@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10)))(typescript@5.5.4)
@@ -14057,6 +14185,11 @@ snapshots:
       filelist: 1.0.6
       picocolors: 1.1.1
 
+  jasmine-marbles@0.9.2(rxjs@7.8.2):
+    dependencies:
+      lodash: 4.18.1
+      rxjs: 7.8.2
+
   jest-changed-files@29.7.0:
     dependencies:
       execa: 5.1.1
@@ -14987,6 +15120,14 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - rxjs
+
+  ngrx-store-localstorage@20.1.0(@angular/common@18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2))(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(@ngrx/store@18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)):
+    dependencies:
+      '@angular/common': 18.2.14(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      '@angular/core': 18.2.14(rxjs@7.8.2)(zone.js@0.14.10)
+      '@ngrx/store': 18.1.1(@angular/core@18.2.14(rxjs@7.8.2)(zone.js@0.14.10))(rxjs@7.8.2)
+      deepmerge: 4.3.1
+      tslib: 2.8.1
 
   nice-napi@1.0.2:
     dependencies:

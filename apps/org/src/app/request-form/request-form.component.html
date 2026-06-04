@@ -165,7 +165,7 @@
               </nz-collapse-panel>
 
               <nz-collapse-panel nzHeader="EventTab">
-                <nz-card class="scroll-card">
+                <nz-card>
 
                   <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
                     <nz-row [nzGutter]="16">
@@ -328,7 +328,7 @@
         <!-- RIGHT SECTION -->
 
         <nz-col [nzXs]="24" [nzMd]="24" [nzLg]="10">
-          <nz-card nzTitle="Document Upload">
+          <nz-card nzTitle="Document Upload" class="upload">
             <input type="file" (change)="onFileSelected($event)" accept=".pdf,.jpg,.jpeg,.png" />
           </nz-card>
         </nz-col>
