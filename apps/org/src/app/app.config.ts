@@ -17,7 +17,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
-import { reducers, metaReducers } from './store';
+import { reducers } from './store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
 
@@ -41,7 +41,7 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(en_US),
     provideNzIcons([InboxOutline]),
     provideHttpClient(),
-    provideStore(reducers, { metaReducers }),
+    provideStore(reducers),
     provideStoreDevtools({
       maxAge: 25
     })

@@ -1,33 +1,10 @@
-// import { createFeature, createReducer, on } from '@ngrx/store';
-// import { ApplicantActions } from './applicant.actions';
-
-// export const applicantFeatureKey = 'applicant';
-
-// export interface State {
-
-// }
-
-// export const initialState: State = {
-
-// };
-
-// export const reducer = createReducer(
-//   initialState,
-//   on(ApplicantActions.loadApplicants, state => state),
-
-// );
-
-// export const applicantFeature = createFeature({
-//   name: applicantFeatureKey,
-//   reducer,
-// });
 
 import { createReducer, on } from '@ngrx/store';
 
 import * as ApplicantActions from './applicant.actions';
 
 import {
-  ApplicantState,
+
   initialState
 } from './applicant.state';
 
@@ -42,7 +19,13 @@ export const applicantReducer = createReducer(
       applicantFormData: formData
     })
   ),
-
+  on(
+    ApplicantActions.saveEventTable,
+    (state, { tableData }) => ({
+      ...state,
+      eventTableData: tableData
+    })
+  ),
   on(
     ApplicantActions.addEventData,
     (state, { row }) => ({
@@ -71,6 +54,18 @@ export const applicantReducer = createReducer(
     })
   ),
 
+
+  on(ApplicantActions.uploadFile, (state, { fileName, fileBytes }) => ({
+    ...state,
+    selectedFileName: fileName,
+    fileBytes: fileBytes
+  })),
+
+
+
+
+
+
   on(
     ApplicantActions.uploadFile,
     (state, { fileName }) => ({
@@ -84,3 +79,26 @@ export const applicantReducer = createReducer(
     () => initialState
   )
 );
+// import { createFeature, createReducer, on } from '@ngrx/store';
+// import { ApplicantActions } from './applicant.actions';
+
+// export const applicantFeatureKey = 'applicant';
+
+// export interface State {
+
+// }
+
+// export const initialState: State = {
+
+// };
+
+// export const reducer = createReducer(
+//   initialState,
+//   on(ApplicantActions.loadApplicants, state => state),
+
+// );
+
+// export const applicantFeature = createFeature({
+//   name: applicantFeatureKey,
+//   reducer,
+// });

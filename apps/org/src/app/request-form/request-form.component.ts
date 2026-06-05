@@ -37,15 +37,19 @@ import {
   deleteEventData,
   saveApplicantForm,
   uploadFile,
-  updateEventData
-} from '../store/applicant/applicant.actions';
+  updateEventData,
 
-interface AccountData {
-  accountNumber: string;
-  currency: string;
-  solId: string;
-  solLocation: string;
-}
+} from '../store/applicant/applicant.actions';
+import { take } from 'rxjs';
+import { ApplicantFormData, EventRow, AccountData } from '../store/applicant/applicant.state';
+import { formatDate } from '@angular/common';
+
+// interface AccountData {
+//   accountNumber: string;
+//   currency: string;
+//   solId: string;
+//   solLocation: string;
+// }
 
 @Component({
   selector: 'app-request-form',
@@ -72,29 +76,38 @@ interface AccountData {
     NzPopconfirmModule,
 
 
-
-
   ],
   templateUrl: './request-form.component.html',
   styleUrls: ['./request-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestFormComponent implements OnInit {
-  applicantData$!: Observable<any>;
-  tableData$!: Observable<any>;
+  applicantData$!: Observable<ApplicantFormData | null>;
+  tableData$!: Observable<EventRow[]>;
 
   applicantForm!: FormGroup;
 
   // fileList: NzUploadFile[] = [];
   uploadedDocuments: File[] = [];
-  submittedRecords: any[] = [];
+  // submittedRecords: any[] = [];
   validateForm!: FormGroup;
 
   nzPageIndex = 1;
 
   nzPageSize = 10;
 
-  tableData: any[] = [];
+  // tableData: any[] = [];
+
+  tableData: EventRow[] = [];
+
+  submittedRecords: ApplicantFormData[] = [];
+
+
+  payload: {
+    document: File | null;
+  } = {
+      document: null
+    };
 
   editIndex: number | null = null;
   date = null;
@@ -308,6 +321,7 @@ export class RequestFormComponent implements OnInit {
       this.tableData = data;
     });
     this.applicantData$ = this.store.select(selectApplicantForm);
+
     this.initializeForm();
     this.currencySyncLogic(this.validateForm);
     // this.currencySyncLogic(this.applicantForm);
@@ -323,67 +337,28 @@ export class RequestFormComponent implements OnInit {
       address3: new FormControl('', Validators.required),
       mobile: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/)
       ]),
-
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email
-      ]),
-
-
+      email: new FormControl('', [Validators.required, Validators.email]),
       currency: new FormControl('', Validators.required),
-
-      amount: new FormControl(null, [
-        Validators.required,
-        Validators.min(1)
-      ]),
-
+      amount: new FormControl(null, [Validators.required, Validators.min(1)]),
       accountNumber: new FormControl('', Validators.required),
-
-      solId: new FormControl({
-        value: '',
-        disabled: true
-      }),
-
-      solLocation: new FormControl({
-        value: '',
-        disabled: true
-      }),
+      solId: new FormControl({ value: '', disabled: true }),
+      solLocation: new FormControl({ value: '', disabled: true }),
       transactionDate: new FormControl(null, Validators.required)
-
-
     });
-
     this.validateForm = new FormGroup({
       firstCurrency: new FormControl(null, Validators.required),
-
       firstAmount: new FormControl(null, Validators.required),
-
-      firstRate: new FormControl({
-        value: null,
-        disabled: true,
-      }),
-
-
-      firstInrAmount: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^\d+(\.\d{1,4})?$/),
-      ]),
-
-      accountNumber2: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[0-9]+$/),
-      ]),
+      firstRate: new FormControl({ value: null, disabled: true, }),
+      firstInrAmount: new FormControl(null, [Validators.required, Validators.pattern(/^\d+(\.\d{1,4})?$/),]),
+      accountNumber2: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]+$/),]),
     });
   }
-
   getRate(currency: string): number | null {
     return this.currencyList.find((x) => x.value === currency)?.rate ?? null;
   }
-
   currencySyncLogic(form: FormGroup): void {
     form.get('firstCurrency')?.valueChanges.subscribe((currency) => {
       const rate = this.getRate(currency);
-
       form.patchValue(
         {
           firstRate: rate,
@@ -392,7 +367,6 @@ export class RequestFormComponent implements OnInit {
           emitEvent: false,
         }
       );
-
       this.calculateFirstInr(form);
     });
   }
@@ -400,13 +374,10 @@ export class RequestFormComponent implements OnInit {
     form.get('firstAmount')?.valueChanges.subscribe(() => {
       this.calculateFirstInr(form);
     });
-
     form.get('firstInrAmount')?.valueChanges.subscribe((value) => {
       const rate = form.getRawValue().firstRate;
-
       if (value && rate) {
         const amount = Number(value) / Number(rate);
-
         form.patchValue(
           {
             firstAmount: Number(amount.toFixed(4)),
@@ -420,23 +391,18 @@ export class RequestFormComponent implements OnInit {
   }
   onNameInput(): void {
     const control = this.applicantForm.get('applicantName');
-
     if (control) {
       const value = (control.value || '')
         .replace(/[^a-zA-Z ]/g, '')
         .toUpperCase();
-
       control.setValue(value, { emitEvent: false });
     }
   }
   calculateFirstInr(form: FormGroup): void {
     const amount = form.get('firstAmount')?.value;
-
     const rate = form.getRawValue().firstRate;
-
     if (rate > 0) {
       const inrAmount = Number(amount) * Number(rate);
-
       form.patchValue(
         {
           firstInrAmount: Number(inrAmount.toFixed(4)),
@@ -463,12 +429,10 @@ export class RequestFormComponent implements OnInit {
         item.accountNumber2 === data.accountNumber2 &&
         index !== this.editIndex
     );
-
     if (exists) {
       this.message.info('Account Number already exists!');
       return;
     }
-
     if (this.editIndex !== null) {
       this.store.dispatch(
         updateEventData({
@@ -491,7 +455,6 @@ export class RequestFormComponent implements OnInit {
     this.editIndex = index;
 
     const row = this.tableData[index];
-
     this.validateForm.patchValue({
       firstCurrency: row.firstCurrency,
       firstAmount: row.firstAmount,
@@ -514,8 +477,6 @@ export class RequestFormComponent implements OnInit {
     this.tableData = [...this.tableData];
     this.message.success('Deleted Successfully');
   }
-
-
   onAccountChange(accountNumber: string): void {
     const selectedAccount = this.accountList.find(
       account =>
@@ -529,7 +490,6 @@ export class RequestFormComponent implements OnInit {
       });
     }
   }
-
   submitForm1(): void {
     Object.values(
       this.applicantForm.controls
@@ -557,8 +517,9 @@ export class RequestFormComponent implements OnInit {
 
     const formData =
       this.applicantForm.getRawValue();
+    // transactionDate: formData.transactionDate,
 
-    const payload = {
+    const payload: ApplicantFormData = {
       applicantName: formData.applicantName,
       address1: formData.address1,
       address2: formData.address2,
@@ -570,25 +531,54 @@ export class RequestFormComponent implements OnInit {
       accountNumber: formData.accountNumber,
       solId: formData.solId,
       solLocation: formData.solLocation,
-      documents: this.selectedFile
-        ? [{ fileName: this.selectedFile.name }]
-        : []
+      transactionDate: formatDate(
+        formData.transactionDate,
+        'dd-MM-yyyy',
+        'en-US'
+      ),
+      eventData: [...this.tableData],
+
+      fileName: file?.name,
+
+      fileBytes: file ? Array.from(new Uint8Array(await file.arrayBuffer())) : []
     };
 
-    const txnDetails = {
-      ...payload
-      // ,      eventData: [...this.tableData]
-    }
+
+
     this.store.dispatch(
       saveApplicantForm({
-        formData: txnDetails
+        formData: payload
       })
     );
-    console.log('Current Record', txnDetails);
+
+
+    // const txnDetails = {
+    //   ...payload
+    //   , eventData: [...this.tableData]
+    // }
+    // this.store.dispatch(
+    //   saveApplicantForm({
+    //     formData: {
+    //       ...payload,
+    //       eventData: [...this.tableData]
+    //     }
+    //   })
+    // );
+    // console.log('Current Record', txnDetails);
     this.message.success('Record Submitted Successfully');
     this.resetForm();
   }
 
+
+
+  convertToDDMMYYYY(date: Date): string {
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
   resetForm(): void {
     this.applicantForm.reset();
     this.validateForm.reset();
@@ -597,50 +587,95 @@ export class RequestFormComponent implements OnInit {
     this.selectedFile = null;
     this.isPdf = false;
     this.pdfUrl = null;
+    this.tableData = [];
   }
-
   exit(): void {
     this.resetForm();
-    this.message.info(
-      'Form Cleared');
+    this.message.info('Form Cleared');
   }
   disabledDate = (current: Date): boolean => {
     return current > new Date();
   }
-  payload: any = {
-    document: null
-  };
+
+
 
   onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
 
-    const file = event.target.files[0];
+    const reader = new FileReader();
 
-    if (file) {
+    reader.onload = () => {
+      const arrayBuffer = reader.result as ArrayBuffer;
+      const byteArray = new Uint8Array(arrayBuffer);
 
-      this.selectedFile = file;
+      this.store.dispatch(uploadFile({
+        fileName: file.name,
+        fileBytes: Array.from(byteArray)   // convert to normal array for NgRx
+      }));
+    };
 
-      this.payload.document = file;
-
-      this.store.dispatch(
-        uploadFile({
-          fileName: file.name
-        })
-      );
-
-    }
+    reader.readAsArrayBuffer(file);
   }
 
+
+
+  // onFileSelected(event: Event): void {
+  //   const input = event.target as HTMLInputElement;
+  //   const file = input.files?.[0];
+  //   if (file) {
+  //     this.selectedFile = file;
+  //     this.payload.document = file;
+  //     this.store.dispatch(
+  //       uploadFile({
+  //         fileName: file.name
+  //       })
+  //     );
+  //   }
+  // }
 
   onMobileInput(): void {
     const control = this.applicantForm.get('mobile');
     if (control) {
-      const value = (control.value || '')
-        .replace(/\D/g, '')
-        .slice(0, 10);
+      const value = (control.value || '').replace(/\D/g, '').slice(0, 10);
       control.setValue(value, { emitEvent: false });
     }
   }
+
+  setStore(): void {
+
+    this.store.select(selectApplicantForm)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (!data) {
+          return;
+        }
+        const [day, month, year] =
+          data.transactionDate.split('-').map(Number);
+        this.applicantForm.patchValue({
+          applicantName: data.applicantName,
+          address1: data.address1,
+          address2: data.address2,
+          address3: data.address3,
+          mobile: data.mobile,
+          email: data.email,
+          currency: data.currency,
+          amount: data.amount,
+          accountNumber: data.accountNumber,
+          solId: data.solId,
+          solLocation: data.solLocation,
+
+          transactionDate: new Date(year, month - 1, day)
+
+        });
+
+        this.tableData = [...(data.eventData || [])];
+        // this.tableData = [...data.eventData];
+        this.message.success('Data Loaded From Store');
+      });
+  }
 }
+
+
 
 
 
@@ -833,4 +868,12 @@ export class RequestFormComponent implements OnInit {
 //   this.tableData = [...this.tableData, data];
 
 //   this.message.success('Added Successfully');
+// }
+// onFileSelected(event: ApplicantFormData): void {
+//   const file = event.target.files[0];
+//   if(file) {
+//     this.selectedFile = file;
+//     this.payload.document = file;
+//     this.store.dispatch(uploadFile({ fileName: file.name }));
+//   }
 // }
