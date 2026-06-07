@@ -3,7 +3,7 @@ import { ActionReducerMap } from '@ngrx/store';
 import { AppState } from './app.state';
 
 import { applicantReducer } from './applicant/applicant.reducer';
-import { metaReducers } from './meta-reducers';
+// import { metaReducers } from './meta-reducers';
 
 export const reducers:
   ActionReducerMap<AppState> = {
@@ -12,4 +12,4 @@ export const reducers:
 
 };
 
-export { metaReducers }
+// export { metaReducers }
