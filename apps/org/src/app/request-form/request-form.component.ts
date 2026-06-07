@@ -32,14 +32,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
 import { selectApplicantForm, selectEventTable, } from '../store/applicant/applicant.selectors';
 import { Observable } from 'rxjs';
-import {
-  addEventData,
-  deleteEventData,
-  saveApplicantForm,
-  uploadFile,
-  updateEventData,
-
-} from '../store/applicant/applicant.actions';
+import {  addEventData,  deleteEventData,  saveApplicantForm,  uploadFile,  updateEventData} from '../store/applicant/applicant.actions';
 import { take } from 'rxjs';
 import { ApplicantFormData, EventRow, AccountData } from '../store/applicant/applicant.state';
 import { formatDate } from '@angular/common';
@@ -112,16 +105,12 @@ export class RequestFormComponent implements OnInit {
   editIndex: number | null = null;
   date = null;
   isEnglish = false;
-  fileUrl!: SafeResourceUrl;
-  pdfUrl: SafeResourceUrl | null = null;
-  isImage = false;
+  // fileUrl!: SafeResourceUrl;
+  // pdfUrl: SafeResourceUrl | null = null;
+  // isImage = false;
 
-  isPdf = false;
+  // isPdf = false;
   selectedFile: File | null = null;
-
-
-
-
   currencyList = [{
     label: 'USD',
     value: 'USD',
@@ -183,9 +172,6 @@ export class RequestFormComponent implements OnInit {
     rate: 50.3245,
   }
   ];
-
-
-
   accountList: AccountData[] = [
     {
       accountNumber: '123456',
@@ -335,8 +321,7 @@ export class RequestFormComponent implements OnInit {
       address1: new FormControl('', Validators.required),
       address2: new FormControl('', Validators.required),
       address3: new FormControl('', Validators.required),
-      mobile: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/)
-      ]),
+      mobile: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]),
       email: new FormControl('', [Validators.required, Validators.email]),
       currency: new FormControl('', Validators.required),
       amount: new FormControl(null, [Validators.required, Validators.min(1)]),
@@ -537,14 +522,9 @@ export class RequestFormComponent implements OnInit {
         'en-US'
       ),
       eventData: [...this.tableData],
-
-      fileName: file?.name,
-
-      fileBytes: file ? Array.from(new Uint8Array(await file.arrayBuffer())) : []
+      fileName: this.selectedFile?.name,
+      file: this.selectedFile || undefined,      
     };
-
-
-
     this.store.dispatch(
       saveApplicantForm({
         formData: payload
@@ -569,8 +549,6 @@ export class RequestFormComponent implements OnInit {
     this.resetForm();
   }
 
-
-
   convertToDDMMYYYY(date: Date): string {
 
     const day = String(date.getDate()).padStart(2, '0');
@@ -585,8 +563,8 @@ export class RequestFormComponent implements OnInit {
     this.editIndex = null;
     this.uploadedDocuments = [];
     this.selectedFile = null;
-    this.isPdf = false;
-    this.pdfUrl = null;
+    // this.isPdf = false;
+    // this.pdfUrl = null;
     this.tableData = [];
   }
   exit(): void {
@@ -597,41 +575,19 @@ export class RequestFormComponent implements OnInit {
     return current > new Date();
   }
 
-
-
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const arrayBuffer = reader.result as ArrayBuffer;
-      const byteArray = new Uint8Array(arrayBuffer);
-
-      this.store.dispatch(uploadFile({
-        fileName: file.name,
-        fileBytes: Array.from(byteArray)   // convert to normal array for NgRx
-      }));
-    };
-
-    reader.readAsArrayBuffer(file);
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.selectedFile = file;
+      this.payload.document = file;
+      this.store.dispatch(
+        uploadFile({
+          fileName: file.name
+        })
+      );
+    }
   }
-
-
-
-  // onFileSelected(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   const file = input.files?.[0];
-  //   if (file) {
-  //     this.selectedFile = file;
-  //     this.payload.document = file;
-  //     this.store.dispatch(
-  //       uploadFile({
-  //         fileName: file.name
-  //       })
-  //     );
-  //   }
-  // }
 
   onMobileInput(): void {
     const control = this.applicantForm.get('mobile');
@@ -642,7 +598,6 @@ export class RequestFormComponent implements OnInit {
   }
 
   setStore(): void {
-
     this.store.select(selectApplicantForm)
       .pipe(take(1))
       .subscribe(data => {
@@ -663,13 +618,13 @@ export class RequestFormComponent implements OnInit {
           accountNumber: data.accountNumber,
           solId: data.solId,
           solLocation: data.solLocation,
-
           transactionDate: new Date(year, month - 1, day)
-
         });
 
         this.tableData = [...(data.eventData || [])];
         // this.tableData = [...data.eventData];
+        
+       
         this.message.success('Data Loaded From Store');
       });
   }
@@ -877,3 +832,27 @@ export class RequestFormComponent implements OnInit {
 //     this.store.dispatch(uploadFile({ fileName: file.name }));
 //   }
 // }
+
+
+
+
+
+  // onFileSelected(event: any): void {
+  //   const file: File = event.target.files[0];
+
+  //   const reader = new FileReader();
+
+  //   reader.onload = () => {
+  //     const arrayBuffer = reader.result as ArrayBuffer;
+  //     const byteArray = new Uint8Array(arrayBuffer);
+
+  //     this.store.dispatch(uploadFile({
+  //       fileName: file.name
+  //       // fileBytes: Array.from(byteArray)   // convert to normal array for NgRx
+  //     }));
+  //   };
+
+  //   reader.readAsArrayBuffer(file);
+  // }
+
+

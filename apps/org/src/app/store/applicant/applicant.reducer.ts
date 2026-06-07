@@ -55,15 +55,11 @@ export const applicantReducer = createReducer(
   ),
 
 
-  on(ApplicantActions.uploadFile, (state, { fileName, fileBytes }) => ({
-    ...state,
-    selectedFileName: fileName,
-    fileBytes: fileBytes
-  })),
-
-
-
-
+  // on(ApplicantActions.uploadFile, (state, { fileName, fileBytes }) => ({
+  //   ...state,
+  //   selectedFileName: fileName,
+  //   fileBytes: fileBytes
+  // })),
 
 
   on(
@@ -79,6 +75,14 @@ export const applicantReducer = createReducer(
     () => initialState
   )
 );
+
+
+
+
+
+
+
+
 // import { createFeature, createReducer, on } from '@ngrx/store';
 // import { ApplicantActions } from './applicant.actions';
 

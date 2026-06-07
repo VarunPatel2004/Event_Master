@@ -27,17 +27,18 @@ export const deleteEventData = createAction(
 );
 
 
-export const uploadFile = createAction(
-  '[Applicant] Upload File',
-  props<{
-    fileName: string;
-    fileBytes: number[];
-  }>()
-);
 // export const uploadFile = createAction(
 //   '[Applicant] Upload File',
-//   props<{ fileName: string }>()
+//   props<{
+//     fileName: string;
+//     fileBytes: number[];
+//   }>()
 // );
+
+export const uploadFile = createAction(
+  '[Applicant] Upload File',
+  props<{ fileName: string }>()
+);
 
 export const resetApplicant = createAction(
   '[Applicant] Reset'

@@ -14,7 +14,8 @@ export interface ApplicantFormData {
   eventData?: EventRow[];
 
   fileName?: string;
-  fileBytes: number[] | null;
+  // fileBytes: number[] | null;
+  file?: File;
 
 }
 export interface EventRow {
