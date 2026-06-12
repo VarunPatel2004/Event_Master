@@ -123,9 +123,10 @@
                           <nz-input-group nzCompact style="display: flex;">
                             <nz-select nzAllowClear formControlName="currency" nzPlaceHolder=" Currency"
                               style="width:40%;">
-                              @for(item of currencyList;track item.value){
-                              <nz-option [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
-                              }
+
+                              <nz-option *ngFor="let item of currencyList" [nzLabel]="item.label"
+                                [nzValue]="item.value"></nz-option>
+
                             </nz-select>
 
                             <input nz-input type="number" step="any" formControlName="amount" placeholder="Amount"
@@ -228,7 +229,7 @@
 
                         </button>
                       </nz-col>
-
+                      <div class="tableColor"></div>
                       <nz-table #basicTable [nzData]="tableData" [nzPageSize]="5" [nzBordered]="true"
                         [nzSize]="'default' " [nzNoResult]=" 'No Data Available'">
 

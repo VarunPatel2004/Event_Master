@@ -1,0 +1,124 @@
+{
+  "accountsList": [
+    {
+      "accountNumber": "123456",
+      "currency": "USD",
+      "solId": "0123",
+      "solLocation": "Swargate"
+    },
+    {
+      "accountNumber": "456789",
+      "currency": "EUR",
+      "solId": "0456",
+      "solLocation": "Shivajinagar"
+    },
+    {
+      "accountNumber": "789123",
+      "currency": "GBP",
+      "solId": "0789",
+      "solLocation": "Hadapsar"
+    },
+    {
+      "accountNumber": "111111",
+      "currency": "INR",
+      "solId": "0101",
+      "solLocation": "Kothrud"
+    },
+    {
+      "accountNumber": "222222",
+      "currency": "USD",
+      "solId": "0102",
+      "solLocation": "Baner"
+    },
+    {
+      "accountNumber": "333333",
+      "currency": "EUR",
+      "solId": "0103",
+      "solLocation": "Aundh"
+    },
+    {
+      "accountNumber": "444444",
+      "currency": "GBP",
+      "solId": "0104",
+      "solLocation": "Wakad"
+    },
+    {
+      "accountNumber": "555555",
+      "currency": "AUD",
+      "solId": "0105",
+      "solLocation": "Pimpri"
+    },
+    {
+      "accountNumber": "666666",
+      "currency": "CAD",
+      "solId": "0106",
+      "solLocation": "Chinchwad"
+    },
+    {
+      "accountNumber": "777777",
+      "currency": "SGD",
+      "solId": "0107",
+      "solLocation": "Nigdi"
+    },
+    {
+      "accountNumber": "888888",
+      "currency": "AED",
+      "solId": "0108",
+      "solLocation": "Camp"
+    },
+    {
+      "accountNumber": "999999",
+      "currency": "CHF",
+      "solId": "0109",
+      "solLocation": "Kharadi"
+    },
+    {
+      "accountNumber": "121212",
+      "currency": "JPY",
+      "solId": "0110",
+      "solLocation": "Magarpatta"
+    },
+    {
+      "accountNumber": "232323",
+      "currency": "NZD",
+      "solId": "0111",
+      "solLocation": "Viman Nagar"
+    },
+    {
+      "accountNumber": "343434",
+      "currency": "USD",
+      "solId": "0112",
+      "solLocation": "Yerawada"
+    },
+    {
+      "accountNumber": "454545",
+      "currency": "EUR",
+      "solId": "0113",
+      "solLocation": "Pashan"
+    },
+    {
+      "accountNumber": "565656",
+      "currency": "GBP",
+      "solId": "0114",
+      "solLocation": "Bavdhan"
+    },
+    {
+      "accountNumber": "676767",
+      "currency": "INR",
+      "solId": "0115",
+      "solLocation": "Warje"
+    },
+    {
+      "accountNumber": "787878",
+      "currency": "AUD",
+      "solId": "0116",
+      "solLocation": "Dhankawadi"
+    },
+    {
+      "accountNumber": "898989",
+      "currency": "CAD",
+      "solId": "0117",
+      "solLocation": "Sinhagad Road"
+    }
+  ]
+}

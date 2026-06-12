@@ -59,7 +59,8 @@
           "buildTarget": "org:build:production"
         },
         "development": {
-          "buildTarget": "org:build:development"
+          "buildTarget": "org:build:development",
+           "proxyConfig": "apps/org/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"

@@ -71,3 +71,7 @@
 .pdf-preview iframe {
   border: none;
 }
+
+.header {
+  background-color: blue;
+}

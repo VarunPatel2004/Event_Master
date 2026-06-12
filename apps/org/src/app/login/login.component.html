@@ -1,0 +1,54 @@
+<div nz-flex nzVertical nzJustify="center" nzAlign="center" class="login-wrapper">
+  <nz-card class="login-card">
+    <div nz-flex nzVertical nzGap="small" class="login-header">
+      <h2>TradeKonnect</h2>
+      <span>Sign in to your account</span>
+    </div>
+
+    <form nz-form nzLayout="vertical" [formGroup]="loginForm" (ngSubmit)="loginFrom()">
+      <nz-row [nzGutter]="[0,10]">
+
+        <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24">
+          <nz-form-item>
+            <nz-form-label><strong>UserName:</strong></nz-form-label>
+            <nz-form-control nzErrorTip="Please input your username!">
+              <input nz-input formControlName="username" placeholder="Username" />
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+
+        <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24">
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your password!">
+              <nz-form-label><strong>Password:</strong></nz-form-label>
+              <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="lock">
+                <input nz-input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+                  placeholder="Password" />
+              </nz-input-group>
+
+              <ng-template #suffixTemplate>
+                <span nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" (click)="togglePassword()"
+                  class="eye-icon"></span>
+              </ng-template>
+
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+
+        <nz-col nzSpan="24">
+          <button nz-button nzType="primary" htmlType="submit" class="login-btn">
+            Login
+          </button>
+        </nz-col>
+
+      </nz-row>
+    </form>
+
+
+  </nz-card>
+  <div class="marquee">
+    <span>
+      Welcome to TradeKonnect • Secure Trading • Fast Execution • Global Finance Platform •
+    </span>
+  </div>
+</div>

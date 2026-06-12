@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -8,7 +8,22 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent { }
+export class AppComponent implements OnInit {
+  constructor(private router: Router) { }
+  ngOnInit() {
+
+    const navEntries = performance.getEntriesByType('navigation');
+    const navigation = navEntries[0] as PerformanceNavigationTiming;
+
+    if (navigation.type === 'reload') {
+
+      sessionStorage.clear();
+      localStorage.clear();
+
+      this.router.navigate(['/login']);
+    }
+  }
+}
 
 
 

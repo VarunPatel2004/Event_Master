@@ -1,14 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -20,30 +13,23 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzUploadChangeParam, NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
-
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+// import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
 import { selectApplicantForm, selectEventTable, } from '../store/applicant/applicant.selectors';
 import { Observable } from 'rxjs';
-import {  addEventData,  deleteEventData,  saveApplicantForm,  uploadFile,  updateEventData} from '../store/applicant/applicant.actions';
+import { addEventData, deleteEventData, saveApplicantForm, uploadFile, updateEventData } from '../store/applicant/applicant.actions';
 import { take } from 'rxjs';
 import { ApplicantFormData, EventRow, AccountData } from '../store/applicant/applicant.state';
 import { formatDate } from '@angular/common';
-
-// interface AccountData {
-//   accountNumber: string;
-//   currency: string;
-//   solId: string;
-//   solLocation: string;
-// }
-
+import { AccountService } from '../store/applicant/account.service';
+import { NzNotificationService, NzNotificationPlacement } from 'ng-zorro-antd/notification';
 @Component({
   selector: 'app-request-form',
   standalone: true,
@@ -64,11 +50,8 @@ import { formatDate } from '@angular/common';
     NzTableModule,
     NzDatePickerModule,
     RouterModule,
-    RouterOutlet,
     NzCollapseModule,
     NzPopconfirmModule,
-
-
   ],
   templateUrl: './request-form.component.html',
   styleUrls: ['./request-form.component.css'],
@@ -77,38 +60,29 @@ import { formatDate } from '@angular/common';
 export class RequestFormComponent implements OnInit {
   applicantData$!: Observable<ApplicantFormData | null>;
   tableData$!: Observable<EventRow[]>;
-
   applicantForm!: FormGroup;
-
+  accountList: AccountData[] = [];
   // fileList: NzUploadFile[] = [];
   uploadedDocuments: File[] = [];
   // submittedRecords: any[] = [];
   validateForm!: FormGroup;
-
   nzPageIndex = 1;
-
   nzPageSize = 10;
-
   // tableData: any[] = [];
-
   tableData: EventRow[] = [];
-
   submittedRecords: ApplicantFormData[] = [];
-
-
   payload: {
     document: File | null;
   } = {
       document: null
     };
-
   editIndex: number | null = null;
   date = null;
   isEnglish = false;
+  placement = 'top';
   // fileUrl!: SafeResourceUrl;
   // pdfUrl: SafeResourceUrl | null = null;
   // isImage = false;
-
   // isPdf = false;
   selectedFile: File | null = null;
   currencyList = [{
@@ -172,132 +146,134 @@ export class RequestFormComponent implements OnInit {
     rate: 50.3245,
   }
   ];
-  accountList: AccountData[] = [
-    {
-      accountNumber: '123456',
-      currency: 'USD',
-      solId: '0123',
-      solLocation: 'Swargate'
-    },
-    {
-      accountNumber: '456789',
-      currency: 'EUR',
-      solId: '0456',
-      solLocation: 'Shivajinagar'
-    },
-    {
-      accountNumber: '789123',
-      currency: 'GBP',
-      solId: '0789',
-      solLocation: 'Hadapsar'
-    },
-    {
-      accountNumber: '111111',
-      currency: 'INR',
-      solId: '0101',
-      solLocation: 'Kothrud'
-    },
-    {
-      accountNumber: '222222',
-      currency: 'USD',
-      solId: '0102',
-      solLocation: 'Baner'
-    },
-    {
-      accountNumber: '333333',
-      currency: 'EUR',
-      solId: '0103',
-      solLocation: 'Aundh'
-    },
-    {
-      accountNumber: '444444',
-      currency: 'GBP',
-      solId: '0104',
-      solLocation: 'Wakad'
-    },
-    {
-      accountNumber: '555555',
-      currency: 'AUD',
-      solId: '0105',
-      solLocation: 'Pimpri'
-    },
-    {
-      accountNumber: '666666',
-      currency: 'CAD',
-      solId: '0106',
-      solLocation: 'Chinchwad'
-    },
-    {
-      accountNumber: '777777',
-      currency: 'SGD',
-      solId: '0107',
-      solLocation: 'Nigdi'
-    },
-    {
-      accountNumber: '888888',
-      currency: 'AED',
-      solId: '0108',
-      solLocation: 'Camp'
-    },
-    {
-      accountNumber: '999999',
-      currency: 'CHF',
-      solId: '0109',
-      solLocation: 'Kharadi'
-    },
-    {
-      accountNumber: '121212',
-      currency: 'JPY',
-      solId: '0110',
-      solLocation: 'Magarpatta'
-    },
-    {
-      accountNumber: '232323',
-      currency: 'NZD',
-      solId: '0111',
-      solLocation: 'Viman Nagar'
-    },
-    {
-      accountNumber: '343434',
-      currency: 'USD',
-      solId: '0112',
-      solLocation: 'Yerawada'
-    },
-    {
-      accountNumber: '454545',
-      currency: 'EUR',
-      solId: '0113',
-      solLocation: 'Pashan'
-    },
-    {
-      accountNumber: '565656',
-      currency: 'GBP',
-      solId: '0114',
-      solLocation: 'Bavdhan'
-    },
-    {
-      accountNumber: '676767',
-      currency: 'INR',
-      solId: '0115',
-      solLocation: 'Warje'
-    },
-    {
-      accountNumber: '787878',
-      currency: 'AUD',
-      solId: '0116',
-      solLocation: 'Dhankawadi'
-    },
-    {
-      accountNumber: '898989',
-      currency: 'CAD',
-      solId: '0117',
-      solLocation: 'Sinhagad Road'
-    }
-  ];
+  // accountList: AccountData[] = [
+  //   {
+  //     accountNumber: '123456',
+  //     currency: 'USD',
+  //     solId: '0123',
+  //     solLocation: 'Swargate'
+  //   },
+  //   {
+  //     accountNumber: '456789',
+  //     currency: 'EUR',
+  //     solId: '0456',
+  //     solLocation: 'Shivajinagar'
+  //   },
+  //   {
+  //     accountNumber: '789123',
+  //     currency: 'GBP',
+  //     solId: '0789',
+  //     solLocation: 'Hadapsar'
+  //   },
+  //   {
+  //     accountNumber: '111111',
+  //     currency: 'INR',
+  //     solId: '0101',
+  //     solLocation: 'Kothrud'
+  //   },
+  //   {
+  //     accountNumber: '222222',
+  //     currency: 'USD',
+  //     solId: '0102',
+  //     solLocation: 'Baner'
+  //   },
+  //   {
+  //     accountNumber: '333333',
+  //     currency: 'EUR',
+  //     solId: '0103',
+  //     solLocation: 'Aundh'
+  //   },
+  //   {
+  //     accountNumber: '444444',
+  //     currency: 'GBP',
+  //     solId: '0104',
+  //     solLocation: 'Wakad'
+  //   },
+  //   {
+  //     accountNumber: '555555',
+  //     currency: 'AUD',
+  //     solId: '0105',
+  //     solLocation: 'Pimpri'
+  //   },
+  //   {
+  //     accountNumber: '666666',
+  //     currency: 'CAD',
+  //     solId: '0106',
+  //     solLocation: 'Chinchwad'
+  //   },
+  //   {
+  //     accountNumber: '777777',
+  //     currency: 'SGD',
+  //     solId: '0107',
+  //     solLocation: 'Nigdi'
+  //   },
+  //   {
+  //     accountNumber: '888888',
+  //     currency: 'AED',
+  //     solId: '0108',
+  //     solLocation: 'Camp'
+  //   },
+  //   {
+  //     accountNumber: '999999',
+  //     currency: 'CHF',
+  //     solId: '0109',
+  //     solLocation: 'Kharadi'
+  //   },
+  //   {
+  //     accountNumber: '121212',
+  //     currency: 'JPY',
+  //     solId: '0110',
+  //     solLocation: 'Magarpatta'
+  //   },
+  //   {
+  //     accountNumber: '232323',
+  //     currency: 'NZD',
+  //     solId: '0111',
+  //     solLocation: 'Viman Nagar'
+  //   },
+  //   {
+  //     accountNumber: '343434',
+  //     currency: 'USD',
+  //     solId: '0112',
+  //     solLocation: 'Yerawada'
+  //   },
+  //   {
+  //     accountNumber: '454545',
+  //     currency: 'EUR',
+  //     solId: '0113',
+  //     solLocation: 'Pashan'
+  //   },
+  //   {
+  //     accountNumber: '565656',
+  //     currency: 'GBP',
+  //     solId: '0114',
+  //     solLocation: 'Bavdhan'
+  //   },
+  //   {
+  //     accountNumber: '676767',
+  //     currency: 'INR',
+  //     solId: '0115',
+  //     solLocation: 'Warje'
+  //   },
+  //   {
+  //     accountNumber: '787878',
+  //     currency: 'AUD',
+  //     solId: '0116',
+  //     solLocation: 'Dhankawadi'
+  //   },
+  //   {
+  //     accountNumber: '898989',
+  //     currency: 'CAD',
+  //     solId: '0117',
+  //     solLocation: 'Sinhagad Road'
+  //   }
+  // ];
   constructor(
     private message: NzMessageService,
     // private sanitizer: DomSanitizer,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private accountService: AccountService,
+    private notification: NzNotificationService
 
   ) { }
 
@@ -307,12 +283,13 @@ export class RequestFormComponent implements OnInit {
       this.tableData = data;
     });
     this.applicantData$ = this.store.select(selectApplicantForm);
-
     this.initializeForm();
     this.currencySyncLogic(this.validateForm);
     // this.currencySyncLogic(this.applicantForm);
     this.amountCalculationLogic(this.validateForm);
     // this.amountCalculationLogic(this.applicantForm);
+    this.loadAccounts();
+
 
   }
   initializeForm(): void {
@@ -322,7 +299,7 @@ export class RequestFormComponent implements OnInit {
       address2: new FormControl('', Validators.required),
       address3: new FormControl('', Validators.required),
       mobile: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@gmail\.com$/)]),
       currency: new FormControl('', Validators.required),
       amount: new FormControl(null, [Validators.required, Validators.min(1)]),
       accountNumber: new FormControl('', Validators.required),
@@ -374,15 +351,7 @@ export class RequestFormComponent implements OnInit {
       }
     });
   }
-  onNameInput(): void {
-    const control = this.applicantForm.get('applicantName');
-    if (control) {
-      const value = (control.value || '')
-        .replace(/[^a-zA-Z ]/g, '')
-        .toUpperCase();
-      control.setValue(value, { emitEvent: false });
-    }
-  }
+
   calculateFirstInr(form: FormGroup): void {
     const amount = form.get('firstAmount')?.value;
     const rate = form.getRawValue().firstRate;
@@ -398,9 +367,18 @@ export class RequestFormComponent implements OnInit {
       );
     }
   }
+  onNameInput(): void {
+    const control = this.applicantForm.get('applicantName');
+    if (control) {
+      const value = (control.value || '')
+        .replace(/[^a-zA-Z ]/g, '')
+        .toUpperCase();
+      control.setValue(value, { emitEvent: false });
+    }
+  }
   submitForm(): void {
     if (this.validateForm.invalid) {
-      Object.values(this.validateForm.controls).forEach((control) => {
+      Object.values(this.validateForm).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -409,13 +387,14 @@ export class RequestFormComponent implements OnInit {
       return;
     }
     const data = this.validateForm.getRawValue();
-    const exists = this.tableData.some(
-      (item, index) =>
-        item.accountNumber2 === data.accountNumber2 &&
-        index !== this.editIndex
+    const exists = this.tableData.some((item, index) =>
+      item.accountNumber2 === data.accountNumber2 &&
+      index !== this.editIndex
     );
     if (exists) {
-      this.message.info('Account Number already exists!');
+      this.notification.error('Duplicate Account',
+        'Account number Alredy Exits', { nzPlacement: 'top' });
+
       return;
     }
     if (this.editIndex !== null) {
@@ -425,6 +404,7 @@ export class RequestFormComponent implements OnInit {
           row: data
         })
       );
+      this.editIndex = null;
     } else {
       this.store.dispatch(
         addEventData({
@@ -434,7 +414,6 @@ export class RequestFormComponent implements OnInit {
     }
     this.validateForm.reset();
   }
-
   editRow(index: number): void {
     console.log('Edit Clicked', index);
     this.editIndex = index;
@@ -449,7 +428,9 @@ export class RequestFormComponent implements OnInit {
     });
   }
   cancel(): void {
-    this.message.info('Deletecancelled');
+    this.notification.success('Delete cancelled',
+      'Delete Cancel', { nzPlacement: 'top' }
+    );
   }
   deleteRow(index: number): void {
     console.log('delete', index);
@@ -460,7 +441,7 @@ export class RequestFormComponent implements OnInit {
       })
     );
     this.tableData = [...this.tableData];
-    this.message.success('Deleted Successfully');
+    this.notification.success('Deleted', 'Record Deleted Succefully');
   }
   onAccountChange(accountNumber: string): void {
     const selectedAccount = this.accountList.find(
@@ -494,8 +475,8 @@ export class RequestFormComponent implements OnInit {
     });
 
     if (this.applicantForm.invalid) {
-      this.message.error(
-        'Please fill all mandatory fields'
+      this.notification.error('Required!',
+        'Please fill all mandatory fields', { nzPlacement: 'top' }
       );
       return;
     }
@@ -523,7 +504,7 @@ export class RequestFormComponent implements OnInit {
       ),
       eventData: [...this.tableData],
       fileName: this.selectedFile?.name,
-      file: this.selectedFile || undefined,      
+      file: this.selectedFile || undefined,
     };
     this.store.dispatch(
       saveApplicantForm({
@@ -545,7 +526,7 @@ export class RequestFormComponent implements OnInit {
     //   })
     // );
     // console.log('Current Record', txnDetails);
-    this.message.success('Record Submitted Successfully');
+    this.notification.success('Submited', 'Record Submitted Successfully', { nzPlacement: 'top' });
     this.resetForm();
   }
 
@@ -596,7 +577,6 @@ export class RequestFormComponent implements OnInit {
       control.setValue(value, { emitEvent: false });
     }
   }
-
   setStore(): void {
     this.store.select(selectApplicantForm)
       .pipe(take(1))
@@ -604,8 +584,7 @@ export class RequestFormComponent implements OnInit {
         if (!data) {
           return;
         }
-        const [day, month, year] =
-          data.transactionDate.split('-').map(Number);
+        const [day, month, year] = data.transactionDate.split('-').map(Number);
         this.applicantForm.patchValue({
           applicantName: data.applicantName,
           address1: data.address1,
@@ -623,10 +602,23 @@ export class RequestFormComponent implements OnInit {
 
         this.tableData = [...(data.eventData || [])];
         // this.tableData = [...data.eventData];
-        
-       
-        this.message.success('Data Loaded From Store');
+
+
+        this.notification.success('SetValue', 'Data Loaded From Store', { nzPlacement: 'top' });
       });
+  }
+
+  loadAccounts(): void {
+    this.accountService.getAccounts().subscribe({
+      next: (response) => {
+        console.log('API Success:', response);
+        this.accountList = response;
+      },
+      error: (error) => {
+        console.error("api Error", error)
+      }
+    })
+
   }
 }
 
@@ -837,22 +829,27 @@ export class RequestFormComponent implements OnInit {
 
 
 
-  // onFileSelected(event: any): void {
-  //   const file: File = event.target.files[0];
+// onFileSelected(event: any): void {
+//   const file: File = event.target.files[0];
 
-  //   const reader = new FileReader();
+//   const reader = new FileReader();
 
-  //   reader.onload = () => {
-  //     const arrayBuffer = reader.result as ArrayBuffer;
-  //     const byteArray = new Uint8Array(arrayBuffer);
+//   reader.onload = () => {
+//     const arrayBuffer = reader.result as ArrayBuffer;
+//     const byteArray = new Uint8Array(arrayBuffer);
 
-  //     this.store.dispatch(uploadFile({
-  //       fileName: file.name
-  //       // fileBytes: Array.from(byteArray)   // convert to normal array for NgRx
-  //     }));
-  //   };
+//     this.store.dispatch(uploadFile({
+//       fileName: file.name
+//       // fileBytes: Array.from(byteArray)   // convert to normal array for NgRx
+//     }));
+//   };
 
-  //   reader.readAsArrayBuffer(file);
-  // }
+//   reader.readAsArrayBuffer(file);
+// }
 
-
+// interface AccountData {
+//   accountNumber: string;
+//   currency: string;
+//   solId: string;
+//   solLocation: string;
+// }
