@@ -1,117 +1,93 @@
-<nz-layout class="app-layout">
-  <nz-header>
-    <div class="logo">
-      <!-- <img src="assets\tklogo.png" alt="Logo" /> -->
-    </div>
-    <ul nz-menu nzMode="horizontal" class="header-menu">
-      <li nz-menu-item nzSelected>Header</li>
+<nz-layout class="inner-layout">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>DASHBOARD</nz-breadcrumb-item>
 
-    </ul>
-  </nz-header>
-  <nz-layout>
-    <nz-sider nzWidth="200px" nzTheme="light">
-      <ul nz-menu nzMode="inline" class="sider-menu">
-        <li nz-submenu nzOpen nzIcon="user" nzTitle="subnav 1">
-          <ul>
-            <li nz-menu-item (click)="request()">Request Form</li>
-            <li nz-menu-item>option2</li>
+  </nz-breadcrumb>
+  <nz-content>
+    <div class="dashboard-container">
+      <nz-row [nzGutter]="[20,10]">
 
-          </ul>
-        </li>
+        <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+          <nz-card class="kpi-card">
+            <div nz-flex nzAlign="center" nzGap="small">
+              <span class="kpi-title">Total Transactions : </span>
+              <span class="kpi-count">2</span>
+            </div>
+          </nz-card>
+        </nz-col>
 
+        <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+          <nz-card class="kpi-card">
+            <div nz-flex nzAlign="center" nzGap="small">
+              <span class="kpi-title">Pending - Checker :</span>
+              <span class="kpi-count">1</span>
+            </div>
+          </nz-card>
+        </nz-col>
 
-      </ul>
-    </nz-sider>
-    <nz-layout class="inner-layout">
-      <nz-breadcrumb>
-        <nz-breadcrumb-item>DASHBOARD</nz-breadcrumb-item>
+        <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+          <nz-card class="kpi-card">
+            <div nz-flex nzAlign="center" nzGap="small">
+              <span class="kpi-title">Pending - Authorizer :</span>
+              <span class="kpi-count">0</span>
+            </div>
+          </nz-card>
+        </nz-col>
 
-      </nz-breadcrumb>
-      <nz-content>
-        <div class="dashboard-container">
-          <nz-row [nzGutter]="[20,10]">
+        <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
+          <nz-card class="kpi-card">
+            <div nz-flex nzAlign="center" nzGap="small">
+              <span class="kpi-title">Pending - Bank :</span>
+              <span class="kpi-count">0</span>
+            </div>
+          </nz-card>
+        </nz-col>
 
-            <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
-              <nz-card class="kpi-card">
-                <div nz-flex nzAlign="center" nzGap="small">
-                  <span class="kpi-title">Total Transactions : </span>
-                  <span class="kpi-count">2</span>
-                </div>
-              </nz-card>
-            </nz-col>
-
-            <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
-              <nz-card class="kpi-card">
-                <div nz-flex nzAlign="center" nzGap="small">
-                  <span class="kpi-title">Pending - Checker :</span>
-                  <span class="kpi-count">1</span>
-                </div>
-              </nz-card>
-            </nz-col>
-
-            <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
-              <nz-card class="kpi-card">
-                <div nz-flex nzAlign="center" nzGap="small">
-                  <span class="kpi-title">Pending - Authorizer :</span>
-                  <span class="kpi-count">0</span>
-                </div>
-              </nz-card>
-            </nz-col>
-
-            <nz-col [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="6">
-              <nz-card class="kpi-card">
-                <div nz-flex nzAlign="center" nzGap="small">
-                  <span class="kpi-title">Pending - Bank :</span>
-                  <span class="kpi-count">0</span>
-                </div>
-              </nz-card>
-            </nz-col>
-
-          </nz-row>
+      </nz-row>
 
 
-          <nz-row [nzGutter]="[10,10]" class=" mt-16">
+      <nz-row [nzGutter]="[10,10]" class=" mt-16">
 
 
-            <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17">
+        <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17">
 
 
-              <nz-card class="round">
-                <div nz-flex nzJustify="space-between" nzAlign="center" class="card-header">
+          <nz-card class="round">
+            <div nz-flex nzJustify="space-between" nzAlign="center" class="card-header">
 
-                  <div class="section-title">
-                    Transaction Summary
-                  </div>
+              <div class="section-title">
+                Transaction Summary
+              </div>
 
-                  <div nz-flex nzAlign="end" nzGap="small">
+              <div nz-flex nzAlign="end" nzGap="small">
 
-                  </div>
+              </div>
 
-                </div>
+            </div>
 
-                <nz-table #basicTable [nzData]="transactionData" [nzBordered]="true" [nzShowPagination]="false"
-                  nzSize="middle" [nzScroll]="{ x: '700px',y:'80px' }">
+            <nz-table #basicTable [nzData]="transactionData" [nzBordered]="true" [nzShowPagination]="false"
+              nzSize="middle" [nzScroll]="{ x: '700px',y:'80px' }">
 
-                  <thead>
-                    <tr>
-                      <th>Products</th>
-                      <th>Maker</th>
-                      <th>Checker</th>
-                      <th>Authorizer</th>
-                      <th>Bank</th>
-                    </tr>
-                  </thead>
+              <thead>
+                <tr>
+                  <th>Products</th>
+                  <th>Maker</th>
+                  <th>Checker</th>
+                  <th>Authorizer</th>
+                  <th>Bank</th>
+                </tr>
+              </thead>
 
-                  <tbody>
-                    <tr *ngFor="let item of basicTable.data">
-                      <td>{{ item.product }}</td>
-                      <td>{{ item.maker }}</td>
-                      <td>{{ item.checker }}</td>
-                      <td>{{ item.authorizer }}</td>
-                      <td>{{ item.bank }}</td>
-                    </tr>
+              <tbody>
+                <tr *ngFor="let item of basicTable.data">
+                  <td>{{ item.product }}</td>
+                  <td>{{ item.maker }}</td>
+                  <td>{{ item.checker }}</td>
+                  <td>{{ item.authorizer }}</td>
+                  <td>{{ item.bank }}</td>
+                </tr>
 
-                    <!-- <tr class="sticky-total-row">
+                <!-- <tr class="sticky-total-row">
                       <td>Total Transactions</td>
                       <td>2</td>
                       <td>0</td>
@@ -119,117 +95,52 @@
                       <td>0</td>
                     </tr> -->
 
-                  </tbody>
+              </tbody>
 
-                </nz-table>
+            </nz-table>
 
-              </nz-card>
+          </nz-card>
 
 
-              <!-- <nz-card class="banner-card mt-16">
+          <!-- <nz-card class="banner-card mt-16">
                 <p>this is banner </p>
               </nz-card> -->
-              <!-- </nz-col> -->
-              <nz-row [nzGutter]="10" class="mt-16">
+          <!-- </nz-col> -->
+          <nz-row [nzGutter]="10" class="mt-16">
 
-                <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="12">
-                  <nz-card class="account-header">
-                    <div nz-flex nzJustify="space-between" nzAlign="center">
+            <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="12">
+              <nz-card class="account-header">
+                <div nz-flex nzJustify="space-between" nzAlign="center">
 
-                      <span class="section-title">
-                        Account Info:
-                      </span>
-
-                      <nz-select nzPlaceHolder="Select Account" style="width: 180px">
-                        <nz-option nzValue="4" nzLabel="212121212121">
-                        </nz-option>
-                      </nz-select>
-
-                    </div>
-
-                    <div class="account-details">
-                      <div class="account-label">
-                        Account Type
-                      </div>
-
-                      <div nz-flex nzJustify="space-between" nzAlign="center">
-                        <span class="account-value">Operative</span>
-
-                        <span class="account-balance">
-                          INR 50,00,04,500.00
-                        </span>
-                      </div>
-                    </div>
-                  </nz-card>
-                </nz-col>
-
-                <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="12">
-                  <nz-card class="round">
-                    <div nz-flex nzJustify="space-between">
-                      <span class="section-title">
-                        Limit Details
-                      </span>
-                      <nz-select nzPlaceHolder="Select" nzSpan="1-24" style="width:150px">
-                        <nz-option nzValue="4" nzLabel="212121212121">
-                        </nz-option>
-                      </nz-select>
-                    </div>
-                    <div class="limit-wrapper">
-                      <div>
-                        <div class="label">
-                          Balance Amount
-                        </div>
-                        <div class="amount">50000000000</div>
-                      </div>
-
-                      <div>
-                        <div class="label">
-                          Sanctioned Amount
-                        </div>
-                        <div class="amount">500000000</div>
-                      </div>
-
-                    </div>
-
-                  </nz-card>
-                </nz-col>
-
-              </nz-row>
-            </nz-col>
-
-
-
-
-
-
-
-            <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="7">
-              <!-- <nz-card>
-                <div nz-flex nzJustify="space-between">
                   <span class="section-title">
-                    Account Information
+                    Account Info:
                   </span>
-                  <span nz-icon nzType="reload"></span>
+
+                  <nz-select nzPlaceHolder="Select Account" style="width: 180px">
+                    <nz-option nzValue="4" nzLabel="212121212121">
+                    </nz-option>
+                  </nz-select>
+
                 </div>
-                <nz-select class="w-100 mt-12" nzPlaceHolder="Select Account">
-                  <nz-option nzValue="1" nzLabel="7087723230001">
-                  </nz-option>
-                </nz-select>
-                <div class="mt-15">
-                  <div class="label">
+
+                <div class="account-details">
+                  <div class="account-label">
                     Account Type
                   </div>
-                  <div nz-flex nzJustify="space-between" nzAlign="center">
-                    <span class="value">Operative</span>
 
-                    <span class="amount-section">
+                  <div nz-flex nzJustify="space-between" nzAlign="center">
+                    <span class="account-value">Operative</span>
+
+                    <span class="account-balance">
                       INR 50,00,04,500.00
                     </span>
                   </div>
                 </div>
-
               </nz-card>
-              <nz-card class="mt-10">
+            </nz-col>
+
+            <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="12">
+              <nz-card class="round">
                 <div nz-flex nzJustify="space-between">
                   <span class="section-title">
                     Limit Details
@@ -256,56 +167,165 @@
 
                 </div>
 
-              </nz-card> -->
-
-              <!-- <nz-card class="mt-10">
-
-                <div nz-flex nzJustify="space-between">
-
-                  <span class="section-title">
-                    Important Notifications
-                  </span>
-
-
-
-                </div>
-
-                <ul class="notification-list">
-
-                  <li>
-                    System maintenance on
-                    15-06-2026 from 02:00 AM to 04:00 AM.
-                  </li>
-
-
-                </ul>
-
-                <div class="view-all">
-                  View All Notifications
-                </div>
-
-              </nz-card> -->
-              <nz-card class="mt-10 small-calendar-card">
-
-
-                <nz-calendar [nzFullscreen]="false"></nz-calendar>
               </nz-card>
-
             </nz-col>
 
           </nz-row>
+        </nz-col>
+        <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="7">
 
-          <nz-row [nzGutter]="10" class="mt-16">
+          <nz-card class="mt-10 small-calendar-card">
 
-            <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24">
-              <nz-card class="banner-card mt-16">
-                <!-- <img src="tradeKonnect.png" class="banner-img" alt="Banner"> -->
-              </nz-card>
-            </nz-col>
-          </nz-row>
 
-        </div>
-      </nz-content>
-    </nz-layout>
-  </nz-layout>
+            <nz-calendar [nzFullscreen]="false"></nz-calendar>
+          </nz-card>
+
+        </nz-col>
+
+      </nz-row>
+
+      <nz-row [nzGutter]="10" class="mt-16">
+
+        <nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24">
+          <nz-card class="banner-card mt-16">
+            <!-- <img src="tradeKonnect.png" class="banner-img" alt="Banner"> -->
+          </nz-card>
+        </nz-col>
+      </nz-row>
+
+    </div>
+  </nz-content>
 </nz-layout>
+
+
+
+
+<!-- <nz-layout class="app-layout">
+  <nz-header>
+    <div class="logo">
+      <img src="tklogo.png" alt="Logo" />
+    </div>
+    <!-- <div class="right-section">
+      <span class="username" (click)="showUserInfo()">Maker - {{user.name}}</span>
+      <span class="logout" (click)="logout()">Logout</span>
+    </div> -->
+<!-- <div class="right-section">
+  <span class="username" (click)="showUserInfo()">
+    Maker - {{ user.name }}
+  </span>
+
+  <span class="logout" (click)="logout()">
+    Logout
+  </span>
+</div>
+</nz-header> -->
+<!-- <nz-modal [(nzVisible)]="isVisible" nzTitle="User Information" (nzOnCancel)="handleCancel()" [nzFooter]="null">
+
+  <ng-container *nzModalContent>
+    <p>ID: {{ user.ID }}</p>
+    <p>Name: {{ user.name }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Address: {{ user.address }}</p>
+    <button nz-button (click)="logout()">Logout</button>
+  </ng-container>
+
+</nz-modal> -->
+<!-- <nz-layout>
+  <nz-sider nzWidth="200px" nzTheme="light">
+    <ul nz-menu nzMode="inline" class="sider-menu">
+      <li nz-submenu nzOpen nzIcon="user" nzTitle="MENU">
+        <ul>
+          <li nz-menu-item (click)="request()"><strong>Request Form</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider> -->
+
+
+
+
+
+
+
+
+<!-- <nz-card>
+                    <div nz-flex nzJustify="space-between">
+                      <span class="section-title">
+                        Account Information
+                      </span>
+                      <span nz-icon nzType="reload"></span>
+                    </div>
+                    <nz-select class="w-100 mt-12" nzPlaceHolder="Select Account">
+                      <nz-option nzValue="1" nzLabel="7087723230001">
+                      </nz-option>
+                    </nz-select>
+                    <div class="mt-15">
+                      <div class="label">
+                        Account Type
+                      </div>
+                      <div nz-flex nzJustify="space-between" nzAlign="center">
+                        <span class="value">Operative</span>
+
+                        <span class="amount-section">
+                          INR 50,00,04,500.00
+                        </span>
+                      </div>
+                    </div>
+
+                  </nz-card>
+                  <nz-card class="mt-10">
+                    <div nz-flex nzJustify="space-between">
+                      <span class="section-title">
+                        Limit Details
+                      </span>
+                      <nz-select nzPlaceHolder="Select" nzSpan="1-24" style="width:150px">
+                        <nz-option nzValue="4" nzLabel="212121212121">
+                        </nz-option>
+                      </nz-select>
+                    </div>
+                    <div class="limit-wrapper">
+                      <div>
+                        <div class="label">
+                          Balance Amount
+                        </div>
+                        <div class="amount">50000000000</div>
+                      </div>
+
+                      <div>
+                        <div class="label">
+                          Sanctioned Amount
+                        </div>
+                        <div class="amount">500000000</div>
+                      </div>
+
+                    </div>
+
+                  </nz-card> -->
+
+<!-- <nz-card class="mt-10">
+
+                    <div nz-flex nzJustify="space-between">
+
+                      <span class="section-title">
+                        Important Notifications
+                      </span>
+
+
+
+                    </div>
+
+                    <ul class="notification-list">
+
+                      <li>
+                        System maintenance on
+                        15-06-2026 from 02:00 AM to 04:00 AM.
+                      </li>
+
+
+                    </ul>
+
+                    <div class="view-all">
+                      View All Notifications
+                    </div>
+
+                  </nz-card> -->

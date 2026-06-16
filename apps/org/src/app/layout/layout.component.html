@@ -1,0 +1,47 @@
+<nz-layout class="app-layout">
+  <nz-header>
+    <div class="logo">
+      <a [routerLink]="['/ui']"> <img src="tklogo.png" alt="Logo" /></a>
+    </div>
+    <!-- <div class="right-section">
+      <span class="username" (click)="showUserInfo()">Maker - {{user.name}}</span>
+      <span class="logout" (click)="logout()">Logout</span>
+    </div> -->
+    <div class="right-section">
+      <span class="loginTime">{{loginTime}}
+      </span>
+      <span class="username" (click)="showUserInfo()">
+        Maker - {{ user.name }}
+      </span>
+      <!-- <span nz-icon nzType="logout" class="logout" (click)="logout()">
+        logout
+      </span> -->
+      <button nz-button nzType="link" nzDanger (click)="logout()">
+
+        <span nz-icon class="logout" nzType="logout"></span>
+      </button>
+    </div>
+  </nz-header>
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="User Information" (nzOnCancel)="handleCancel()" [nzFooter]="null">
+
+    <ng-container *nzModalContent>
+      <p>ID: {{ user.ID }}</p>
+      <p>Name: {{ user.name }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>Address: {{ user.address }}</p>
+      <button nz-button class="logIn" (click)="logout()">Logout</button>
+    </ng-container>
+
+  </nz-modal>
+  <nz-layout>
+    <nz-sider nzWidth="200px" nzTheme="light">
+      <ul nz-menu nzMode="inline" class="sider-menu">
+        <!-- <li nz-submenu nzOpen nzIcon="user" nzTitle="MENU">
+          <ul> -->
+        <li nz-menu-item (click)="request()">Request Form</li>
+        <!-- </ul>
+        </li> -->
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-content><router-outlet></router-outlet></nz-content>

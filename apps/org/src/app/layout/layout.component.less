@@ -1,0 +1,264 @@
+.dashboard-container {
+  width: 100%;
+  background: #f5f7fb;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.app-layout {
+  min-height: 100dvh;
+}
+
+.ant-card-body {
+  padding: 8px;
+}
+.round {
+  border-radius: 10px;
+}
+
+.view-all {
+  color: #1677ff;
+  text-align: right;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+// .right-section {
+//   display: flex;
+//   align-items: center;
+//   gap: 20px;
+// }
+
+.ant-layout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+// .right-section {
+//   display: flex;
+//   align-items: center;
+//   gap: 12px;
+//   flex-wrap: nowrap;
+// }
+
+.right-section button {
+  flex-shrink: 0;
+  background-color: transparent;
+}
+.loginTime{
+  color: #f5f7fb;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.username {
+  cursor: pointer;
+  color: rgb(200, 255, 0);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.logout {
+  cursor: pointer;
+  color: rgb(255, 0, 68);
+  font-weight: 700;
+  white-space: nowrap;
+
+}
+.logIn{
+  background: #1677ff;
+  color: #f8f9fa;
+}
+
+.username:hover,
+.logout:hover {
+  text-decoration: underline;
+}
+:host ::ng-deep .ant-card-body {
+  padding: 8px;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .dashboard-title {
+    font-size: 22px;
+  }
+}
+
+
+.logo {
+  width: auto;
+  height: 75px;
+  /* margin: 16px 28px 16px 0; */
+  float: left;
+  overflow: hidden;
+  margin-top: -21px;
+  flex-shrink: 0;
+  background-image: url('tklogo.png');
+}
+
+.logo img {
+  height: 123px;
+  width: auto;
+  margin-top: -8px;
+}
+
+.header-menu {
+  line-height: 30px;
+
+  width: 100%;
+}
+
+// .ant-layout-header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   padding: 0 20px;
+// }
+
+.sider-menu {
+  height: 100%;
+  border-right: 0;
+  cursor: pointer;
+
+}
+
+.inner-layout {
+  padding: 8px 10px 10px;
+  color: black;
+}
+
+nz-breadcrumb {
+  margin: 0px 0;
+}
+
+// nz-content {
+
+//   overflow: auto;
+//   background: #f5f7fb;
+// }
+
+nz-content {
+  background: #f5f7fb;
+  overflow-x: hidden;
+  width:100%;
+}
+
+nz-header {
+  min-height: 64px;
+  height: auto;
+}
+@media (max-width: 768px) {
+
+  .logo {
+    height: 50px;
+    margin-top: 0;
+  }
+
+  .logo img {
+    height: 50px;
+    margin-top: 0;
+  }
+}
+@media (max-width: 768px) {
+
+  .right-section {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .loginTime {
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// nz-header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// }
+
+
+
+/* .right-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.username {
+  margin-left: 10px;
+  cursor: pointer;
+  color: rgb(200, 255, 0);
+  font-weight: 700;
+}
+
+.logout {
+  margin-left: 10px;
+  cursor: pointer;
+  color: rgb(255, 0, 68);
+  font-weight: 700;
+}
+
+.logout.username:hover {
+  text-decoration: underline;
+} */
+/* .small-calendar-card {
+  overflow: hidden;
+
+  min-height: 340px;
+  max-height: 345px;
+}
+
+:host ::ng-deep .small-calendar-card .ant-card-body {
+  padding: 8px;
+}
+
+:host ::ng-deep .small-calendar-card .ant-picker-calendar-mini {
+  width: 100%;
+}
+
+:host ::ng-deep .small-calendar-card .ant-picker-cell {
+  padding: 0;
+}
+
+:host ::ng-deep .small-calendar-card .ant-picker-cell-inner {
+  min-height: 24px;
+  line-height: 24px;
+}
+
+:host ::ng-deep .small-calendar-card .ant-picker-calendar-header {
+  padding: 4px 0;
+}
+
+:host ::ng-deep .ant-picker-calendar-mini {
+  transform: scale(0.75);
+  transform-origin: top center;
+} */
+
+/* table  */

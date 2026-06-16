@@ -12,6 +12,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { SessionTimeoutService } from '../session-timeout.service';
 
 
 
@@ -31,11 +32,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   styleUrl: './login.component.less',
 })
 export class LoginComponent {
-
+  // private timeoutId: any;
   constructor(private router: Router,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private sessionTimeoutService: SessionTimeoutService
 
   ) { }
+
 
 
   loginForm = new FormGroup({
@@ -70,7 +73,15 @@ export class LoginComponent {
       this.notification.success('Login Success', 'WelCome To TradeKonnect',
         { nzPlacement: 'top' }
       )
-
+      sessionStorage.setItem('loginTime', new Date().toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+      ));
+      this.sessionTimeoutService.startWatching();
       this.router.navigate(['/ui']);
     } else {
       this.notification.error('Login Failde', 'Please Enter The Correct  UserId And Password',
@@ -79,3 +90,18 @@ export class LoginComponent {
     }
   }
 }
+
+
+// ngOnInit(): void {
+//   this.resetTimeout();
+//   document.addEventListener('keypress', this.resetTimeout.bind(this));
+// }
+
+// resetTimeout() {
+//   clearTimeout(this.timeoutId);
+//   this.timeoutId = setTimeout(() => {
+//     sessionStorage.clear();
+//     this.notification.warning('Session TimeOut', '', { nzPlacement: 'top' });
+//     this.router.navigate(['/login'])
+//   }, 60 * 1000);
+// }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
+import { SessionTimeoutService } from './session-timeout.service';
+// import type { SessionTimeoutService } from './session-timeout.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -9,7 +11,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+    private sessionTimeoutService: SessionTimeoutService
+  ) { }
   ngOnInit() {
 
     const navEntries = performance.getEntriesByType('navigation');
@@ -21,6 +25,13 @@ export class AppComponent implements OnInit {
       localStorage.clear();
 
       this.router.navigate(['/login']);
+    }
+
+    const isLoggedIn =
+      sessionStorage.getItem('isLoggedIn');
+
+    if (isLoggedIn === 'true') {
+      this.sessionTimeoutService.startWatching();
     }
   }
 }

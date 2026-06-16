@@ -27,13 +27,14 @@
   .currency-amount {
     flex-direction: column;
   }
-
 }
 
+/*
 .whole {
   background-color: rgb(243, 245, 245);
   overflow: hidden;
   padding: 5px;
+
 }
 
 
@@ -42,22 +43,43 @@
 }
 
 .scroll-card ::ng-deep .ant-card-body {
-  height: 240px;
+  height: auto;
+  height: calc(100% - 55px);
   overflow-y: auto;
 }
 
 .scrollable-card {
-  height: calc(100vh - 10px);
+  height: 100%;
   overflow-y: auto;
+  overflow-x: visible;
   background-color: azure;
+} */
+
+/* .whole {
+  height: calc(100vh - 120px);
+  overflow: hidden;
+}
+
+.container {
+  height: 100%;
+}
+
+.scrollable-card {
+  height: 100%;
+}
+
+.scrollable-card ::ng-deep .ant-card-body {
+  height: calc(100% - 55px);
+  overflow-y: auto !important;
 }
 
 .upload {
   background-color: azure;
-}
+} */
+
 
 .upload-card {
-  height: calc(100vh - 10px);
+  height: 100%;
   overflow: hidden;
 }
 
@@ -74,4 +96,37 @@
 
 .header {
   background-color: blue;
+}
+
+.whole {
+  height: calc(100vh - 120px);
+  overflow: hidden;
+  background-color: rgb(243, 245, 245);
+  padding: 5px;
+}
+
+.container {
+  height: 100%;
+}
+
+.scrollable-card {
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollable-card ::ng-deep .ant-card-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}
+
+.upload {
+  background-color: azure;
+}
+
+.scrollable-card ::ng-deep nz-collapse {
+  display: block;
+  height: auto;
 }

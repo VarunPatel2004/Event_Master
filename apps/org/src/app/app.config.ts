@@ -7,18 +7,17 @@ import { provideNzI18n, en_US } from 'ng-zorro-antd/i18n';
 import { InboxOutline, UploadOutline } from '@ant-design/icons-angular/icons';
 
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import {
-  EditOutline,
-  DeleteOutline,
-  PlusOutline,
-  SaveOutline,
-} from '@ant-design/icons-angular/icons';
+import { EditOutline, DeleteOutline, PlusOutline, SaveOutline, LogoutOutline } from '@ant-design/icons-angular/icons';
 import { provideHttpClient } from '@angular/common/http';
-
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { reducers } from './store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { importProvidersFrom } from '@angular/core';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+
+
+
 
 
 const icons = [
@@ -28,6 +27,9 @@ const icons = [
   SaveOutline,
   InboxOutline,
   UploadOutline,
+  LogoutOutline,
+
+
 ];
 
 export const appConfig: ApplicationConfig = {
@@ -42,6 +44,9 @@ export const appConfig: ApplicationConfig = {
     provideNzIcons([InboxOutline]),
     provideHttpClient(),
     provideStore(reducers),
+    provideNzIcons([LogoutOutline]),
+
+    importProvidersFrom(NzModalModule),
     provideStoreDevtools({
       maxAge: 25
     })
